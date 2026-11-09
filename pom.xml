@@ -31,6 +31,14 @@
             <version>1.22.0-beta32</version>
         </dependency>
 
+        <!-- Test 4 : Embeddings locaux -->
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-embeddings-bge-small-en-v15</artifactId>
+            <version>1.22.0-beta32</version>
+        </dependency>
+
+
     </dependencies>
 
 </project>
