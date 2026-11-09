@@ -51,7 +51,7 @@ public class MeteoTool {
         try {
             // Construire l'URL de l'API météo en utilisant les coordonnées et la période spécifiée
             String baseUrl = "https://api.open-meteo.com/v1/forecast";
-            int finPeriode = Math.min(nbJoursDebut + nbJours, 7); // L'API fournit des prévisions pour 7 jours maximum
+            int finPeriode = Math.min(nbJoursDebut + nbJours, 7); // Limite de 7 jours retenue par le TP
             String apiUri = String.format(Locale.US,
                 "%s?latitude=%f&longitude=%f&daily=precipitation_probability_max&forecast_days=%d",
                 baseUrl, latitude, longitude, finPeriode);

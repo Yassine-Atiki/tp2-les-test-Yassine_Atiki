@@ -1,0 +1,227 @@
+<!doctype html><html lang="fr"><meta charset="utf-8"><title>Email bonus TP 2</title>
+<style>body{font:16px/1.55 Arial,sans-serif;max-width:1000px;margin:32px auto;padding:0 24px;color:#17202a}h2{font-size:21px;margin-top:32px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.5 Consolas,monospace;background:#f4f6f8;padding:16px;border:1px solid #d9dfe5}strong{font-weight:700} @media print{body{margin:0;max-width:none}pre{break-inside:avoid}}</style>
+<body><p><strong>Objet : [CASA-IA : groupe à compléter] [N° étudiant à compléter] TP 2 - tests terminé - Yassine Atiki</strong></p>
+<p>Bonjour Monsieur Grin,</p>
+<p>Je vous transmets mon travail pour la partie « Quelques tests avec LangChain4j » du TP 2 (Tests 1 à 7). Le projet est un projet Maven Java 25. Les résultats et les explications demandés sont reproduits ci-dessous dans le corps de cet email.</p>
+<p>Dépôt GitHub : https://github.com/Yassine-Atiki/tp2-les-test-Yassine_Atiki</p>
+<p>Les résultats des Tests 1 à 6 et du premier essai sans outils sont les sorties authentiques sauvegardées pendant mon travail précédent. Les nouveaux essais du Test 7 utilisent réellement Gemini et Open-Meteo. Les dates des prévisions sont celles des JSON enregistrés, en GMT comme dans le code du TP ; elles ne constituent pas une prévision permanente.</p>
+<h2>Test 1 — Question sur l’heure</h2>
+<pre>Question : Quelle heure est-il maintenant ?
+Réponse : Je ne peux pas vous donner l&#x27;heure exacte car je n&#x27;ai pas accès à votre localisation ni à votre fuseau horaire. 
+
+Vous pouvez consulter l&#x27;horloge de votre appareil (téléphone, ordinateur, montre) pour connaître l&#x27;heure actuelle !</pre>
+<p>Cet appel simple ne reçoit ni l’heure de mon ordinateur ni un outil donnant l’heure. Le modèle ne fournit donc pas une heure actuelle vérifiée. Sa réponse évoque ma localisation et mon fuseau horaire ; cela reste une explication générée par le modèle, et non la preuve d’une consultation de l’horloge.</p>
+<h2>Test 1 — Présentation et mémoire</h2>
+<pre>Question 1 : Bonjour, je m&#x27;appelle Yassine Atiki.
+Réponse 1 : Bonjour Yassine ! Ravi de faire votre connaissance. Comment puis-je vous aider aujourd&#x27;hui ?
+------------------------------
+Question 2 : Comment je m&#x27;appelle ?
+Réponse 2 : Je ne le sais pas encore ! Comme je suis une intelligence artificielle, je ne connais pas votre nom à moins que vous ne me le disiez. 
+
+Comment vous appelez-vous ?</pre>
+<p>Les deux appels model.chat(String) du Test 1 sont indépendants : le deuxième appel ne retransmet pas la présentation. L’API étant sans état et aucune ChatMemory n’étant associée à ces appels, le modèle ne dispose plus de mon nom.</p>
+<h2>Test 4 — Comparaison des embeddings</h2>
+<pre>Couple 1
+Phrase 1 : Le chat dort sur le canapé.
+Phrase 2 : Un félin se repose sur le sofa.
+Similarité BGE : 0,6475
+Similarité Gemini : 0,9323
+
+Couple 2
+Phrase 1 : Il fait très chaud aujourd&#x27;hui.
+Phrase 2 : Il fait très froid aujourd&#x27;hui.
+Similarité BGE : 0,9084
+Similarité Gemini : 0,8533
+
+Couple 3
+Phrase 1 : Je programme une application Java.
+Phrase 2 : Je développe un logiciel en Java.
+Similarité BGE : 0,8267
+Similarité Gemini : 0,9617
+
+Couple 4
+Phrase 1 : La voiture roule sur l&#x27;autoroute.
+Phrase 2 : Je prépare une salade de tomates.
+Similarité BGE : 0,6093
+Similarité Gemini : 0,7195
+
+Couple 5
+Phrase 1 : L&#x27;étudiant révise pour son examen.
+Phrase 2 : Un élève se prépare à une épreuve.
+Similarité BGE : 0,7174
+Similarité Gemini : 0,9306
+
+Couple 6
+Phrase 1 : Le ciel est couvert et il pleut.
+Phrase 2 : Une banque approuve un prêt immobilier.
+Similarité BGE : 0,7048
+Similarité Gemini : 0,7269</pre>
+<p>BGE Small EN V1.5 quantifié fonctionne localement ; Gemini utilise gemini-embedding-001 avec SEMANTIC_SIMILARITY. Dans ces mesures, Gemini classe mieux les trois couples de sens proche (1, 3 et 5) que les couples sans rapport (4 et 6). BGE attribue notamment 0,9084 au couple chaud/froid : les phrases partagent leur structure et leur sujet. Un score de cosinus élevé ne signifie donc pas une équivalence logique ; des opposés peuvent rester proches dans l’espace d’embeddings. La pertinence du classement compte davantage qu’un seuil universel.</p>
+<h2>Test 5 — RAG et contenu de infos.txt</h2>
+<pre>=== Sans RAG ===
+Question : Comment s&#x27;appelle le chat de Pierre ?
+Réponse : Il y a plusieurs personnages ou personnes nommés Pierre qui ont des chats célèbres. Pourriez-vous préciser de quel Pierre il s&#x27;agit ? 
+
+Par exemple :
+* S&#x27;agit-il d&#x27;un personnage de fiction, de littérature (comme dans un conte) ?
+* D&#x27;une personnalité publique ou d&#x27;un influenceur ?
+* D&#x27;une énigme ?
+
+Donnez-moi un peu plus de contexte et je pourrai vous répondre !</pre>
+<pre>=== Avec RAG ===
+Question : Comment s&#x27;appelle le chat de Pierre ?
+Réponse : Le chat de Pierre s&#x27;appelle Felix.</pre>
+<pre>=== Avec RAG ===
+Question : Pierre appelle son chat. Qu&#x27;est-ce qu&#x27;il pourrait dire ?
+Réponse : Il pourrait dire « Felix ».</pre>
+<p>Pour l’expérience demandée, j’ai temporairement remplacé la phrase sur Paris par « La capitale de la France est Marseille. ».</p>
+<pre>=== Avec RAG ===
+Question : Quelle est la capitale de la France ?
+Réponse : D&#x27;après les informations fournies, la capitale de la France est Marseille.</pre>
+<p>Le modèle reprend ici le contexte récupéré par le RAG, y compris une affirmation volontairement fausse. Le RAG apporte des informations privées, mais ne garantit pas leur exactitude. Le fichier infos.txt a ensuite été restauré et contient bien « La capitale de la France est Paris. ».</p>
+<pre>=== Avec RAG ===
+Question : Quelle est la capitale de la France ?
+Réponse : La capitale de la France est Paris.</pre>
+<h2>Test 6 — PDF et conversation</h2>
+<pre>Vous : Quel est l&#x27;objectif du cours « Agents conversationnels en Java avec LangChain4j » de Richard Grin ?
+Gemini : D&#x27;après les informations fournies, le texte ne mentionne pas explicitement l&#x27;objectif global du cours de Richard Grin, mais il détaille plusieurs sujets abordés dans celui-ci en lien avec LangChain4j :
+
+* **L&#x27;utilisation d&#x27;agents conversationnels et de services IA** en Java (via `AiServices`) pour interagir avec des modèles de langage (LM) comme Google Gemini.
+* **L&#x27;utilisation d&#x27;outils (tools)** par les agents IA pour étendre leurs capacités ou agir sur l&#x27;extérieur (par exemple, des outils de météo ou de calcul), en simplifiant un processus complexe grâce à l&#x27;annotation `@Tool`.
+* **La gestion des résultats** (avec `Result&lt;T&gt;`), incluant le suivi de l&#x27;utilisation des tokens (`TokenUsage`) et des exécutions d&#x27;outils.
+* **La récupération de types structurés** en réponse (des objets Java plutôt qu&#x27;une simple chaîne de caractères) pour plus de sécurité et de facilité de traitement.
+* **L&#x27;utilisation de modèles de chat** (`ChatModel`, `ChatRequest`, `ChatResponse`) pour effectuer des requêtes de type question-réponse.
+
+Vous : Peux-tu m&#x27;expliquer plus en détail le rôle de AiServices que tu viens de mentionner ?
+Gemini : Sur la base des informations fournies, voici le rôle de `AiServices` :
+
+* **Création et instanciation d&#x27;assistants virtuels :** Il permet de construire des services ou des assistants (via `AiServices.builder(...)`) à partir d&#x27;interfaces Java (comme `Aide` ou `Assistant`).
+* **Configuration des modèles et des capacités :** Il sert à associer un modèle de langage (`chatModel` ou `streamingChatModel`), d&#x27;ajouter de la mémoire de conversation (`chatMemory`), ou d&#x27;intégrer des outils (`tools`) que le modèle peut exécuter.
+* **Gestion de la modération et des guardrails :** Il permet d&#x27;intégrer des mécanismes pour vérifier et contrôler ce qui est envoyé au modèle de langage (LM) et ce qui est retourné par celui-ci, assurant ainsi des échanges appropriés et sûrs (notamment grâce à l&#x27;association d&#x27;un `ModerationModel`).
+* **Gestion avancée des requêtes :** Il propose des méthodes pour gérer l&#x27;exécution des outils (en mode séquentiel ou parallèle, gestion des erreurs), ajouter des écouteurs d&#x27;événements, ou configurer le RAG (gestion de la mémoire des messages augmentés).</pre>
+<p>Le document interrogé est langchain4j.pdf. La réponse ne prétend pas trouver un objectif explicite absent des extraits : elle décrit les thèmes récupérés. La relance sur AiServices illustre la continuité de la conversation avec MessageWindowChatMemory.withMaxMessages(10). Le chargement du PDF, l’ingestion et le retriever déjà validés sont conservés.</p>
+<h2>Test 7 — Première expérience sans outils</h2>
+<pre>Question : Je dois partir dans 2 jours à Paris ; j&#x27;y resterai 3 jours. Est-ce que je dois mettre un parapluie dans mes valises ?
+Réponse : C&#x27;est une excellente question, surtout à Paris où le temps peut être capricieux ! 
+
+Pour vous répondre avec précision, il me faudrait la date exacte ou consulter la météo en temps réel pour les 3 prochains jours. Cependant, règle générale pour Paris : **oui, glissez un petit parapluie pliant dans votre valise.** 
+
+Voici pourquoi :
+1. **Le climat parisien** est très changeant. Même au printemps ou en été, une averse surprise est vite arrivée.
+2. **Vous allez probablement marcher beaucoup** (visites, musées, balades le long de la Seine). Être mouillé gâche vite une journée de tourisme.
+3. Un petit parapluie ne prend presque pas de place et ne pèse rien.
+
+**Mon conseil :** Regardez l&#x27;application météo de votre smartphone juste avant de fermer votre valise pour confirmer, mais par sécurité, prévoyez-le ! Bon voyage à Paris !
+Tokens d&#x27;entrée : 36
+Tokens de sortie : 204
+Tokens de raisonnement : 0
+Total déclaré : 240
+Coût de la requête : 0,00052080 $
+Requêtes pour dépenser 1 $ : 1921</pre>
+<p>Sans outil, Gemini conseille un parapluie d’après des généralités et reconnaît qu’il ne consulte pas de prévisions en temps réel. Cette réponse, reproduite intégralement, ne démontre donc aucune météo effective pour les dates du séjour. Le coût ci-dessus est l’estimation de l’expérience initiale avec les tarifs alors utilisés dans Test2Couts ; ce n’est pas une facture ni une nouvelle vérification tarifaire.</p>
+<h2>Test 7 — API Open-Meteo et TestMeteo</h2>
+<p>Requête directe demandée : https://api.open-meteo.com/v1/forecast?latitude=48.85&amp;longitude=2.35&amp;daily=precipitation_probability_max&amp;forecast_days=3</p>
+<pre>{&quot;latitude&quot;:48.853382,&quot;longitude&quot;:2.355208,&quot;generationtime_ms&quot;:0.030517578125,&quot;utc_offset_seconds&quot;:0,&quot;timezone&quot;:&quot;GMT&quot;,&quot;timezone_abbreviation&quot;:&quot;GMT&quot;,&quot;elevation&quot;:46.0,&quot;daily_units&quot;:{&quot;time&quot;:&quot;iso8601&quot;,&quot;precipitation_probability_max&quot;:&quot;%&quot;},&quot;daily&quot;:{&quot;time&quot;:[&quot;2026-11-09&quot;,&quot;2026-11-10&quot;,&quot;2026-11-11&quot;],&quot;precipitation_probability_max&quot;:[90,83,53]}}</pre>
+<p>forecast_days=3 comprend le jour courant. Pour un départ demain et un séjour de 3 jours, l’outil demande 4 jours et ne teste que les indices 1, 2, 3 ; pour un départ dans 2 jours, il demande 5 jours et teste les indices 2, 3, 4. Le seuil du professeur est strictement supérieur à 25 %. Les probabilités Paris enregistrées sont [90,83,53], puis [90,83,53,15] et [90,83,53,15,15] : les trois séjours dépassent donc ce seuil. TestMeteo a aussi réellement testé Rabat et Sydney, ainsi que les seuils 0 % et 100 %. À 100 %, le résultat est false, conformément à la comparaison stricte. Des contrôles locaux explicitement distincts des prévisions vérifient 25/26 %, les indices, les entrées invalides et les valeurs nulles. Une période dépassant les 7 jours retenus par le TP est refusée plutôt que tronquée silencieusement.</p>
+<h2>Test 7 — Conversation avec un seul outil</h2>
+<pre>Question : J&#x27;ai prévu d&#x27;aller aujourd&#x27;hui à la ville dont la latitude est 48.85 et la longitude est 2.35 pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?
+Réponse : Oui, je vous conseille de mettre un parapluie dans votre valise, car de la pluie est prévue durant votre séjour de 3 jours à partir d&#x27;aujourd&#x27;hui.</pre>
+<pre>Question : Finalement, je ne vais partir que demain. Est-ce que tu me conseilles de prendre un parapluie ?
+Réponse : Oui, je vous conseille toujours de prendre un parapluie. De la pluie est prévue pour votre séjour de 3 jours, qui commence cette fois-ci demain.</pre>
+<pre>Question : Explique en une phrase ce qu&#x27;est une interface Java.
+Réponse : Une interface Java est un contrat de programmation abstrait qui définit un ensemble de méthodes que les classes qui l&#x27;implémentent s&#x27;engagent à fournir.</pre>
+<pre>Question : J&#x27;ai prévu d&#x27;aller aujourd&#x27;hui à Paris pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?
+Réponse : Pour Paris (latitude 48.8566, longitude 2.3522), voici les prévisions pour votre séjour de 3 jours commençant aujourd&#x27;hui :</pre>
+<pre>Question : J&#x27;ai prévu d&#x27;aller aujourd&#x27;hui à la ville de Zzyzx pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?
+Réponse : Je ne connais pas les coordonnées géographiques (latitude et longitude) de la ville de Zzyzx, ce qui m&#x27;empêche de vérifier les prévisions météo pour cet endroit. Si vous me les fournissez, je pourrai vous dire s&#x27;il est conseillé de prendre un parapluie.</pre>
+<p>Les deux premières requêtes météo utilisent bien forecast_days=3 puis 4 pour un séjour de trois jours, avec nbJoursDebut=0 puis 1. La réponse sur Paris donnée ensuite est incomplète dans cette exécution : je la conserve telle quelle et ne la présente pas comme une prévision supplémentaire validée. Pour Zzyzx, le modèle demande les coordonnées. Une autre tentative, sauvegardée séparément, avait proposé des coordonnées de mémoire : cela montre la variabilité du modèle, sans prouver l’exactitude de ses connaissances géographiques. La consigne système de conservation de la durée a été ajoutée après un essai où le modèle avait réduit le séjour à un seul jour.</p>
+<h2>Test 7 — Conversation avec les deux outils</h2>
+<pre>Question : J&#x27;ai prévu d&#x27;aller aujourd&#x27;hui à Paris pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?
+Réponse : Oui, je vous conseille de mettre un parapluie dans votre valise. Des prévisions de pluie sont annoncées à Paris pour les 3 prochains jours.</pre>
+<pre>Question : Finalement, je ne vais partir que demain. Est-ce que tu me conseilles de prendre un parapluie ?
+Réponse : Oui, je vous conseille toujours de prendre un parapluie. Des prévisions de pluie sont annoncées pour votre séjour de 3 jours à partir de demain.</pre>
+<pre>Question : J&#x27;ai prévu d&#x27;aller aujourd&#x27;hui à Rabat,Morocco pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?
+Réponse : Oui, je vous conseille de mettre un parapluie dans votre valise. Des prévisions de pluie sont annoncées à Rabat pour votre séjour de 3 jours qui commence aujourd&#x27;hui.</pre>
+<pre>Question : J&#x27;ai prévu d&#x27;aller aujourd&#x27;hui à la ville de Zzyzx pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?
+Réponse : Non, je ne vous conseille pas de mettre un parapluie dans votre valise. Aucune pluie n&#x27;est prévue à Zzyzx pour votre séjour de 3 jours qui commence aujourd&#x27;hui.</pre>
+<pre>Question : Dois-je prendre un parapluie aujourd&#x27;hui à VilleInexistanteQzxv987654 pour un séjour de 3 jours ?
+Réponse : Je n&#x27;ai pas pu trouver les coordonnées de la ville « VilleInexistanteQzxv987654 » (cette ville est introuvable). Je ne peux donc pas vérifier les prévisions météo pour cet endroit.</pre>
+<pre>Question : Explique en une phrase ce qu&#x27;est une interface Java.
+Réponse : En Java, une interface est un contrat abstrait qui définit un ensemble de méthodes que les classes qui l&#x27;implémentent s&#x27;engagent à fournir.</pre>
+<p>Les traces HTTP montrent getCoordonnees puis isPluiePrevue pour les villes nommées. Le géocodage retourne notamment Zzyzx à [35.14276,-116.10474] et la météo [0,0,0]. Le nom volontairement inexistant ne donne aucun résultat ; l’exception réelle est transmise au modèle, qui explique sa limite. La question Java est traitée sans appel météo. Les expériences indépendantes ont été séparées par la commande « nouveau », après observation d’un HTTP 400 Gemini lorsqu’une longue conversation cumulait les villes et saturait la fenêtre imposée de 20 messages. La question de départ et sa relance « demain » restent dans la même conversation.</p>
+<h2>Test 7 — JSON réels, nouvelle session Zzyzx après activation du logging</h2>
+<p>Question : J&#x27;ai prévu d&#x27;aller aujourd&#x27;hui à la ville de Zzyzx pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?</p>
+<p>Les fragments ci-dessous sont prélevés littéralement dans les corps JSON capturés par le vrai client HTTP Google GenAI. Les explications sont en gras et placées immédiatement avant chaque fragment pour garder les JSON lisibles. Seules les parties nouvelles sont reproduites ; les répétitions de l’historique ne sont pas recopiées. Les journaux complets et les corps bruts sont conservés dans le dépôt.</p>
+<p><strong>1. APPLICATION → GEMINI — REQUÊTE initiale. Le champ tools décrit les deux fonctions Java disponibles et leurs paramètres ; le modèle peut demander leur exécution, sans accéder lui-même au code Java.</strong></p>
+<pre>&quot;tools&quot;:[{&quot;functionDeclarations&quot;:[{&quot;description&quot;:&quot;Retourne la latitude puis la longitude de la première ville trouvée par Open-Meteo.\nLe nom doit être en anglais. On peut préciser le pays, par exemple Rabat,Morocco.\nUtiliser ces coordonnées pour appeler ensuite isPluiePrevue.\nUne ville introuvable provoque une erreur ; ne pas inventer ses coordonnées.\n&quot;,&quot;name&quot;:&quot;getCoordonnees&quot;,&quot;parameters&quot;:{&quot;description&quot;:&quot;&quot;,&quot;properties&quot;:{&quot;ville&quot;:{&quot;description&quot;:&quot;Nom de ville en anglais, éventuellement suivi du pays&quot;,&quot;type&quot;:&quot;STRING&quot;}},&quot;required&quot;:[&quot;ville&quot;],&quot;type&quot;:&quot;OBJECT&quot;}},{&quot;description&quot;:&quot;Retourne true si la probabilité d&#x27;avoir de la pluie pour la ville dont on donne la latitude et la longitude\nest importante durant une période de nbJours jours. La période commence nbJourDebut jours après aujourd&#x27;hui.\nPar exemple, si nbJoursDebut = 1 et nbJours = 2, la période de 2 jours commence demain (1 jour après aujourd&#x27;hui).\nSi nbJoursDebut = 0 et nbJours = 3, la période de 3 jours commence aujourd&#x27;hui.\nRetourne false sinon.\n&quot;,&quot;name&quot;:&quot;isPluiePrevue&quot;,&quot;parameters&quot;:{&quot;description&quot;:&quot;&quot;,&quot;properties&quot;:{&quot;latitude&quot;:{&quot;description&quot;:&quot;Latitude&quot;,&quot;type&quot;:&quot;NUMBER&quot;},&quot;longitude&quot;:{&quot;description&quot;:&quot;Longitude&quot;,&quot;type&quot;:&quot;NUMBER&quot;},&quot;nbJoursDebut&quot;:{&quot;description&quot;:&quot;Nombre de jours après aujourd&#x27;hui pour indiquer le début de la période&quot;,&quot;type&quot;:&quot;INTEGER&quot;},&quot;nbJours&quot;:{&quot;description&quot;:&quot;Nombre de jours de la période&quot;,&quot;type&quot;:&quot;INTEGER&quot;}},&quot;propertyOrdering&quot;:[&quot;latitude&quot;,&quot;longitude&quot;,&quot;nbJoursDebut&quot;,&quot;nbJours&quot;],&quot;required&quot;:[&quot;latitude&quot;,&quot;longitude&quot;,&quot;nbJoursDebut&quot;,&quot;nbJours&quot;],&quot;type&quot;:&quot;OBJECT&quot;}}]}]</pre>
+<p><strong>2. GEMINI → APPLICATION — RÉPONSE à la première requête et demande d’exécution de getCoordonnees. Le modèle fournit Zzyzx comme argument. L’identifiant relie l’appel à son résultat. LangChain4j exécute ensuite la méthode Java.</strong></p>
+<pre>&quot;functionCall&quot;: {
+              &quot;name&quot;: &quot;getCoordonnees&quot;,
+              &quot;args&quot;: {
+                &quot;ville&quot;: &quot;Zzyzx&quot;
+              },
+              &quot;id&quot;: &quot;call_2787286228850517705&quot;
+            }</pre>
+<p><strong>3. APPLICATION → OPEN-METEO — REQUÊTE HTTP de géocodage, réalisée par la méthode Java. Ce n’est pas un appel direct du LLM au Web.</strong></p>
+<pre>GET https://geocoding-api.open-meteo.com/v1/search?name=Zzyzx</pre>
+<p><strong>4. OPEN-METEO → APPLICATION — RÉPONSE HTTP 200 du géocodage. Le premier résultat fournit les coordonnées utilisées par l’outil.</strong></p>
+<pre>{&quot;results&quot;:[{&quot;id&quot;:5411245,&quot;name&quot;:&quot;Zzyzx&quot;,&quot;latitude&quot;:35.14276,&quot;longitude&quot;:-116.10474,&quot;elevation&quot;:290.0,&quot;feature_code&quot;:&quot;PPL&quot;,&quot;country_code&quot;:&quot;US&quot;,&quot;admin1_id&quot;:5332921,&quot;admin2_id&quot;:5391726,&quot;timezone&quot;:&quot;America/Los_Angeles&quot;,&quot;population&quot;:1,&quot;country_id&quot;:6252001,&quot;country&quot;:&quot;United States&quot;,&quot;admin1&quot;:&quot;California&quot;,&quot;admin2&quot;:&quot;San Bernardino&quot;}],&quot;generationtime_ms&quot;:0.17344952}</pre>
+<p><strong>5. APPLICATION → GEMINI — NOUVELLE REQUÊTE contenant la réponse de l’outil getCoordonnees. Bien que le champ soit nommé functionResponse, il est envoyé dans une nouvelle requête HTTP de l’application à Gemini. Le résultat est une chaîne représentant le tableau Java sérialisé.</strong></p>
+<pre>&quot;functionResponse&quot;:{&quot;id&quot;:&quot;call_2787286228850517705&quot;,&quot;name&quot;:&quot;getCoordonnees&quot;,&quot;response&quot;:{&quot;result&quot;:&quot;[35.14276,-116.10474]&quot;}}</pre>
+<p><strong>6. GEMINI → APPLICATION — RÉPONSE à cette deuxième requête et demande d’exécution de isPluiePrevue. Le modèle reprend les coordonnées retournées par le géocodage ; nbJoursDebut=0 et nbJours=3 décrivent le séjour.</strong></p>
+<pre>&quot;functionCall&quot;: {
+              &quot;name&quot;: &quot;isPluiePrevue&quot;,
+              &quot;args&quot;: {
+                &quot;longitude&quot;: -116.10474,
+                &quot;latitude&quot;: 35.14276,
+                &quot;nbJoursDebut&quot;: 0,
+                &quot;nbJours&quot;: 3
+              },
+              &quot;id&quot;: &quot;call_3373297188592331085&quot;
+            }</pre>
+<p><strong>7. APPLICATION → OPEN-METEO — REQUÊTE HTTP météo avec ces coordonnées et forecast_days=3. La méthode Java applique ensuite le seuil strict de 25 %.</strong></p>
+<pre>GET https://api.open-meteo.com/v1/forecast?latitude=35.142760&amp;longitude=-116.104740&amp;daily=precipitation_probability_max&amp;forecast_days=3</pre>
+<p><strong>8. OPEN-METEO → APPLICATION — RÉPONSE HTTP 200 météo. Les probabilités sont nulles en pourcentage (0 %), et non des valeurs JSON null indisponibles.</strong></p>
+<pre>{&quot;latitude&quot;:35.12898,&quot;longitude&quot;:-116.10696,&quot;generationtime_ms&quot;:0.04410743713378906,&quot;utc_offset_seconds&quot;:0,&quot;timezone&quot;:&quot;GMT&quot;,&quot;timezone_abbreviation&quot;:&quot;GMT&quot;,&quot;elevation&quot;:286.0,&quot;daily_units&quot;:{&quot;time&quot;:&quot;iso8601&quot;,&quot;precipitation_probability_max&quot;:&quot;%&quot;},&quot;daily&quot;:{&quot;time&quot;:[&quot;2026-11-09&quot;,&quot;2026-11-10&quot;,&quot;2026-11-11&quot;],&quot;precipitation_probability_max&quot;:[0,0,0]}}</pre>
+<p><strong>9. APPLICATION → GEMINI — TROISIÈME REQUÊTE, ajoutant le résultat false de isPluiePrevue. Le reste de l’historique est retransmis par LangChain4j mais n’est pas répété ici.</strong></p>
+<pre>&quot;functionResponse&quot;:{&quot;id&quot;:&quot;call_3373297188592331085&quot;,&quot;name&quot;:&quot;isPluiePrevue&quot;,&quot;response&quot;:{&quot;result&quot;:&quot;false&quot;}}</pre>
+<p><strong>10. GEMINI → APPLICATION — RÉPONSE finale en langage naturel, désormais fondée sur le résultat réel de l’outil.</strong></p>
+<pre>&quot;text&quot;: &quot;D&#x27;après les prévisions pour votre séjour de 3 jours à Zzyzx (qui commence aujourd&#x27;hui), aucune pluie n&#x27;est prévue. Il n&#x27;est donc pas nécessaire de prendre un parapluie dans votre valise !&quot;</pre>
+<p>Les thoughtSignature visibles dans les corps complets sont des métadonnées opaques du fournisseur liées aux réponses ; elles ne constituent pas du texte de raisonnement à interpréter. Elles ne sont pas recopiées dans ces extraits centrés sur les outils.</p>
+<h2>Test 7 — JSON du cas d’erreur, session indépendante</h2>
+<p><strong>11. GEMINI → APPLICATION — RÉPONSE demandant le géocodage du nom volontairement inexistant.</strong></p>
+<pre>&quot;functionCall&quot;: {
+              &quot;name&quot;: &quot;getCoordonnees&quot;,
+              &quot;args&quot;: {
+                &quot;ville&quot;: &quot;VilleInexistanteQzxv987654&quot;
+              },
+              &quot;id&quot;: &quot;call_8002231450628647994&quot;
+            }</pre>
+<p><strong>12. OPEN-METEO → APPLICATION — RÉPONSE réelle HTTP 200 sans tableau results. Le statut HTTP est un succès de transport, mais ne signifie pas qu’une ville a été trouvée.</strong></p>
+<pre>{&quot;generationtime_ms&quot;:0.06067753}</pre>
+<p><strong>13. APPLICATION → GEMINI — NOUVELLE REQUÊTE avec le message de l’exception réelle de getCoordonnees. Le gestionnaire d’erreur de LangChain4j transmet ce résultat au modèle. Aucun appel météo n’a lieu pour cette ville.</strong></p>
+<pre>&quot;functionResponse&quot;:{&quot;id&quot;:&quot;call_8002231450628647994&quot;,&quot;name&quot;:&quot;getCoordonnees&quot;,&quot;response&quot;:{&quot;result&quot;:&quot;Aucune coordonnée trouvée pour la ville : VilleInexistanteQzxv987654&quot;}}</pre>
+<p><strong>14. GEMINI → APPLICATION — RÉPONSE finale expliquant qu’aucune prévision ne peut être vérifiée.</strong></p>
+<pre>&quot;text&quot;: &quot;Je suis désolé, mais je n&#x27;ai pas trouvé les coordonnées de la ville \&quot;VilleInexistanteQzxv987654\&quot;. Il m&#x27;est donc impossible de vérifier les prévisions météo pour cet endroit et de vous dire si vous aurez besoin d&#x27;un parapluie.&quot;</pre>
+<h2>Test 7 — Comptage complet des tokens pour une seule question</h2>
+<pre>Échange Gemini | Entrée | Sortie | Total déclaré
+1 | 600 | 20 | 620
+2 | 655 | 48 | 703
+3 | 719 | 49 | 768
+SOMME | 1974 | 117 | 2091</pre>
+<p>Cette somme provient des trois usageMetadata des réponses Gemini de la même session neuve Zzyzx, et non du seul dernier échange. Les champs de tokens de réflexion et de cache ne sont pas renseignés dans ces réponses ; je ne leur attribue pas une mesure inventée. Les appels HTTP Open-Meteo ne consomment pas de tokens Gemini directement, mais les résultats d’outils réinjectés et l’historique retransmis participent aux entrées des requêtes suivantes.</p>
+<p>Pour économiser des tokens, je proposerais un nouvel outil previsionsPluieParVille(ville, nbJoursDebut, nbJours). Il enchaînerait le géocodage et la météo en Java puis retournerait un résultat concis. Gemini ferait normalement un seul appel d’outil au lieu de deux : une requête intermédiaire, une réponse et une retransmission de l’historique seraient évitées. Les deux requêtes HTTP Open-Meteo resteraient nécessaires, mais les coordonnées n’auraient plus à transiter par un échange LLM supplémentaire. Le gain exact devrait être mesuré ; je ne donne pas de faux chiffre. Ce nouvel outil n’est pas codé, conformément à la consigne.</p>
+<h2>Code, vérifications et commits</h2>
+<p>MeteoTool reprend codeoutil1.html et codeoutil2.html du professeur, avec annotations, contrôles d’entrée, délais HTTP, encodage des noms de villes et traces des réponses réelles. L’interface AssistantMeteo est dans son propre fichier. Le builder utilise AiServices, MessageWindowChatMemory.withMaxMessages(20) et tools(new MeteoTool()). La classe autonome TestMeteo est incluse. logback.xml reprend le fichier fourni, et logRequestsAndResponses(true) est activé.</p>
+<p>LangChain4j 1.22.0, google-genai 1.22.0-beta32 et Java 25 sont conservés ; Gson 2.15.0 et Logback 1.6.6 sont déclarés. Les clés restent dans GEMINI_KEY. Les Tests 1 à 6, infos.txt restauré et le PDF ont été préservés. La partie Web et les options ne font pas partie de ce dépôt de tests.</p>
+<p>Vérifications : compilation Maven de toutes les classes ; exécution autonome de TestMeteo ; conversations réelles à un puis deux outils ; sessions neuves Zzyzx et ville inexistante avec capture JSON. Les incidents et les premières tentatives sont conservés séparément des traces retenues, sans correction des sorties a posteriori.</p>
+<pre>60a2800 test7: geocodage et enchainement des deux outils
+0f624eb test7: outil pluie Open-Meteo et conversation avec memoire
+3081851 test6: RAG avec PDF et conversation interactive
+694b5d6 test5: implementation du RAG avec LangChain4j
+601f82c test4: comparaison des embeddings BGE et Gemini
+7319f73 test3: traduction avec PromptTemplate
+ccd1abb test2: calcul du cout en tokens Gemini
+9956ef8 test1: premiers appels Gemini avec LangChain4j</pre>
+<p>Les étapes « un outil » (0f624eb) et « deux outils » (60a2800) ont chacune été suivies d’un push et d’une vérification du commit distant. La dernière étape regroupe le logging, les preuves brutes et cette préparation du bonus. Les fichiers de preuves complètent l’email, dont le corps contient déjà les résultats demandés.</p>
+<p>Cordialement,<br>Yassine Atiki</p></body></html>

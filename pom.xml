@@ -54,6 +54,13 @@
             <version>2.15.0</version>
         </dependency>
 
+        <!-- Implémentation SLF4J pour observer les échanges du Test 7 -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.6.6</version>
+        </dependency>
+
     </dependencies>
 
 </project>

@@ -1,0 +1,64 @@
+[
+  {
+    "ordre": 1,
+    "type": "requete",
+    "fichier": "requete-01.json",
+    "ligne_log": 44,
+    "sha256": "b1a253ede4373da51154e87cb98c17c898de91b676c761472e4a79276e50077c"
+  },
+  {
+    "ordre": 2,
+    "type": "reponse",
+    "fichier": "reponse-01.json",
+    "ligne_log": 45,
+    "sha256": "8ec1562eb6d82109de378a934d2e8036d8aae75ffef8cfc5ec04286c5554ee86",
+    "http": 200,
+    "usageMetadata": {
+      "promptTokenCount": 610,
+      "candidatesTokenCount": 30,
+      "totalTokenCount": 640,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 610
+        }
+      ],
+      "serviceTier": "standard"
+    }
+  },
+  {
+    "ordre": 3,
+    "type": "open-meteo",
+    "fichier": "open-meteo-01.json",
+    "ligne_log": 88,
+    "sha256": "95c594221e8529724a49410253475f39e63c30e8f0fa6d3527436afdd812435d",
+    "http": 200
+  },
+  {
+    "ordre": 4,
+    "type": "requete",
+    "fichier": "requete-02.json",
+    "ligne_log": 120,
+    "sha256": "4995b27608b99956fbc484defd0c2840e248fd8248a35a4642d155fc8000b8cd"
+  },
+  {
+    "ordre": 5,
+    "type": "reponse",
+    "fichier": "reponse-02.json",
+    "ligne_log": 121,
+    "sha256": "86faedc740f3459174fe1a82f112e3e4bf6813cffdc32a009565569845b95010",
+    "http": 200,
+    "usageMetadata": {
+      "promptTokenCount": 679,
+      "candidatesTokenCount": 63,
+      "totalTokenCount": 742,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 679
+        }
+      ],
+      "serviceTier": "standard"
+    }
+  }
+]

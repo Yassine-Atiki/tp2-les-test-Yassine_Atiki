@@ -43,3 +43,22 @@ avec la documentation officielle et de vrais appels. Les données du bonus sont
 exclusivement réelles ; aucun mock n'est utilisé comme preuve. La commande
 `postman status` n'est pas reconnue par le CLI installé (1.76.0) ; aucun workspace
 Postman n'est nécessaire ni publié pour ce TP.
+
+
+Étape géocodage : getCoordonnees reprend le code officiel (premier résultat), avec
+encodage UTF-8 du nom et réutilisation de la lecture HTTP. Les exceptions sont
+transmises au LLM par ToolExecutionErrorHandler.sendExceptionMessageToLlm(), pour
+qu'une absence de coordonnées soit expliquée et non transformée en météo inventée.
+
+Une conversation cumulant toutes les villes a rempli la fenêtre imposée de 20
+messages et provoqué un HTTP 400 Gemini sur l'ordre des rôles. Trace conservée dans
+tentative-fenetre-20-*. La commande « nouveau » ouvre maintenant une mémoire vide
+entre expériences indépendantes ; le suivi Paris → départ demain reste dans la
+même conversation. Le TP impose une fenêtre de messages, pas une mémoire illimitée.
+
+Logging : logback.xml est celui du professeur ; Logback 1.6.6 a été vérifié sur Maven
+Central. GoogleGenAiChatModel 1.22.0-beta32 affiche des objets Java avec
+logRequestsAndResponses(true), et non tous les corps JSON HTTP. TraceJsonGemini est
+donc un petit ajout du projet : intercepteur OkHttp du vrai SDK Google GenAI,
+observant les corps réels à destination de Google et les réponses réelles. Aucun
+proxy, mock ni reconstruction des JSON ; ni URL avec clé ni en-têtes ne sont loggés.

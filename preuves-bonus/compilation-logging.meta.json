@@ -1,0 +1,14 @@
+{
+  "started_utc": "2026-11-09T23:20:45.452014+00:00",
+  "ended_utc": "2026-11-09T23:21:00.265945+00:00",
+  "command": [
+    "mvn.cmd",
+    "clean",
+    "compile",
+    "dependency:build-classpath",
+    "-Dmdep.outputFile=target/classpath.txt"
+  ],
+  "stdin": null,
+  "exit_code": 0,
+  "source": "exécution réelle ; sortie stdout et stderr fusionnée"
+}

@@ -1,0 +1,99 @@
+[
+  {
+    "ordre": 1,
+    "type": "requete",
+    "fichier": "requete-01.json",
+    "ligne_log": 44,
+    "sha256": "3873307216a6d3041bd492708e509434db61c53625873d010f59d201dd09b7fe"
+  },
+  {
+    "ordre": 2,
+    "type": "reponse",
+    "fichier": "reponse-01.json",
+    "ligne_log": 45,
+    "sha256": "daec34b3b98a5de94581657505597905529f7c1d2795fe12e12c45196c7e5fc5",
+    "http": 200,
+    "usageMetadata": {
+      "promptTokenCount": 600,
+      "candidatesTokenCount": 20,
+      "totalTokenCount": 620,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 600
+        }
+      ],
+      "serviceTier": "standard"
+    }
+  },
+  {
+    "ordre": 3,
+    "type": "open-meteo",
+    "fichier": "open-meteo-01.json",
+    "ligne_log": 88,
+    "sha256": "16a91d9da7db7bab634c0bcb2741a82caeea793a2942c1cf0960b3546c291e8a",
+    "http": 200
+  },
+  {
+    "ordre": 4,
+    "type": "requete",
+    "fichier": "requete-02.json",
+    "ligne_log": 120,
+    "sha256": "d86874a875f089df641b048b327a6a64f4710e76c2785fbd47da48c485a258ac"
+  },
+  {
+    "ordre": 5,
+    "type": "reponse",
+    "fichier": "reponse-02.json",
+    "ligne_log": 121,
+    "sha256": "5ab14a931808a2ecbe96192f7eb61964d17ce3c77e8500f316eb1cd73b2863ac",
+    "http": 200,
+    "usageMetadata": {
+      "promptTokenCount": 655,
+      "candidatesTokenCount": 48,
+      "totalTokenCount": 703,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 655
+        }
+      ],
+      "serviceTier": "standard"
+    }
+  },
+  {
+    "ordre": 6,
+    "type": "open-meteo",
+    "fichier": "open-meteo-02.json",
+    "ligne_log": 167,
+    "sha256": "9c7d479f73dfe0074c7fb93e270b0bcd55dc83208c719560831b9f79ff8dc86a",
+    "http": 200
+  },
+  {
+    "ordre": 7,
+    "type": "requete",
+    "fichier": "requete-03.json",
+    "ligne_log": 199,
+    "sha256": "34045f2f7dba061a3e3a0753291034819149228bd70b8126a42777140e5e93d1"
+  },
+  {
+    "ordre": 8,
+    "type": "reponse",
+    "fichier": "reponse-03.json",
+    "ligne_log": 200,
+    "sha256": "ede7c94f490829a174e1059eff22b91f645f752dfb971ab7989c9c05d95eef23",
+    "http": 200,
+    "usageMetadata": {
+      "promptTokenCount": 719,
+      "candidatesTokenCount": 49,
+      "totalTokenCount": 768,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 719
+        }
+      ],
+      "serviceTier": "standard"
+    }
+  }
+]

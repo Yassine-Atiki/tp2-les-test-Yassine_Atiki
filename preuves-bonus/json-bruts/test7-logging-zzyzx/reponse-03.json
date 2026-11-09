@@ -1,0 +1,31 @@
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "D'après les prévisions pour votre séjour de 3 jours à Zzyzx (qui commence aujourd'hui), aucune pluie n'est prévue. Il n'est donc pas nécessaire de prendre un parapluie dans votre valise !",
+            "thoughtSignature": "EmAKXgFpFH0TPC5N7YFEPmrHj810hLecaSXiEOtL7e93o48Gs3b7jZPuZr34ZnWokgsc1C+z6XfEIwVXY8e1UrXrqxtwv6GNcGnQeU3oGhpPfrsNKwvZHe8XL3N94xC4q1g="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "index": 0
+    }
+  ],
+  "usageMetadata": {
+    "promptTokenCount": 719,
+    "candidatesTokenCount": 49,
+    "totalTokenCount": 768,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 719
+      }
+    ],
+    "serviceTier": "standard"
+  },
+  "modelVersion": "gemini-3.5-flash-lite",
+  "responseId": "e1Xyas3EMciYkdUPpP6x2A4"
+}

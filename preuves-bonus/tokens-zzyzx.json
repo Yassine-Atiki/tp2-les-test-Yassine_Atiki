@@ -1,0 +1,48 @@
+{
+  "question": "J'ai prévu d'aller aujourd'hui à la ville de Zzyzx pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?",
+  "appels_llm": 3,
+  "interactions": [
+    {
+      "promptTokenCount": 600,
+      "candidatesTokenCount": 20,
+      "totalTokenCount": 620,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 600
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    {
+      "promptTokenCount": 655,
+      "candidatesTokenCount": 48,
+      "totalTokenCount": 703,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 655
+        }
+      ],
+      "serviceTier": "standard"
+    },
+    {
+      "promptTokenCount": 719,
+      "candidatesTokenCount": 49,
+      "totalTokenCount": 768,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 719
+        }
+      ],
+      "serviceTier": "standard"
+    }
+  ],
+  "totaux": {
+    "promptTokenCount": 1974,
+    "candidatesTokenCount": 117,
+    "totalTokenCount": 2091
+  },
+  "note": "Somme des usageMetadata de chaque réponse, et non seulement de la dernière. Les compteurs thoughtsTokenCount et cachedContentTokenCount ne sont pas renseignés par ces réponses."
+}
