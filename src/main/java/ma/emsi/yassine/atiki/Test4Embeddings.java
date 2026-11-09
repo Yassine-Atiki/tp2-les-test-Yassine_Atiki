@@ -2,7 +2,7 @@ package ma.emsi.yassine.atiki;
 
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.model.embedding.EmbeddingModel;
-import dev.langchain4j.model.embedding.onnx.bgesmallenv15.BgeSmallEnV15EmbeddingModel;
+import dev.langchain4j.model.embedding.onnx.bgesmallenv15q.BgeSmallEnV15QuantizedEmbeddingModel;
 import dev.langchain4j.model.google.genai.GoogleGenAiEmbeddingModel;
 import dev.langchain4j.store.embedding.CosineSimilarity;
 
@@ -14,7 +14,7 @@ public class Test4Embeddings {
 
         // Modèle local
         EmbeddingModel modeleBge =
-                new BgeSmallEnV15EmbeddingModel();
+                new BgeSmallEnV15QuantizedEmbeddingModel();
 
         // Modèle externe Gemini
         EmbeddingModel modeleGemini =
