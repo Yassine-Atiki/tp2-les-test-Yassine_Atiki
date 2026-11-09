@@ -24,6 +24,18 @@ public class TestMeteo {
         if (Arrays.asList(args).contains("--local")) return;
 
         MeteoTool outil = new MeteoTool();
+        for (String ville : new String[]{"Paris", "Rabat,Morocco", "Zzyzx"}) {
+            double[] coordonnees = outil.getCoordonnees(ville);
+            System.out.println("Coordonnées de " + ville + " : " + Arrays.toString(coordonnees));
+            verifier(coordonnees.length == 2, "latitude et longitude attendues");
+        }
+        try {
+            outil.getCoordonnees("VilleInexistanteQzxv987654");
+            throw new AssertionError("La ville de contrôle ne doit pas exister.");
+        } catch (RuntimeException e) {
+            verifier(e.getMessage().contains("Aucune coordonnée"), "erreur de ville introuvable attendue");
+            System.out.println("Ville inexistante : " + e.getMessage());
+        }
         tester(outil, "Paris aujourd'hui, 3 jours", 48.85, 2.35, 0, 3);
         tester(outil, "Paris demain, 3 jours", 48.85, 2.35, 1, 3);
         tester(outil, "Paris dans 2 jours, 3 jours", 48.85, 2.35, 2, 3);
