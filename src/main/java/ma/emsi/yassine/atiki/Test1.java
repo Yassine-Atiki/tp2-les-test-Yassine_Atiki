@@ -1,4 +1,3 @@
-
 package ma.emsi.yassine.atiki;
 
 import dev.langchain4j.model.chat.ChatModel;
