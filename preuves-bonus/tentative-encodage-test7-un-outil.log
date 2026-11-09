@@ -1,0 +1,21 @@
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+Test 7 � mod�le : gemini-3.5-flash-lite
+Tapez fin ou exit pour terminer.
+Question : J'ai pr�vu d'aller aujourd'hui � la ville dont la latitude est 48.85 et la longitude est 2.35 pour un s�jour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?
+API GET https://api.open-meteo.com/v1/forecast?latitude=48.850000&longitude=2.350000&daily=precipitation_probability_max&forecast_days=3
+HTTP 200 JSON BRUT : {"latitude":48.853382,"longitude":2.355208,"generationtime_ms":0.027179718017578125,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":46.0,"daily_units":{"time":"iso8601","precipitation_probability_max":"%"},"daily":{"time":["2026-11-09","2026-11-10","2026-11-11"],"precipitation_probability_max":[90,83,53]}}
+R�ponse : Oui, je vous conseille de mettre un parapluie dans votre valise, car de la pluie est pr�vue pendant votre s�jour de 3 jours qui commence aujourd'hui � Paris (latitude 48.85, longitude 2.35).
+Question : Finalement, je ne vais partir que demain. Est-ce que tu me conseilles de prendre un parapluie ?
+API GET https://api.open-meteo.com/v1/forecast?latitude=48.850000&longitude=2.350000&daily=precipitation_probability_max&forecast_days=2
+HTTP 200 JSON BRUT : {"latitude":48.853382,"longitude":2.355208,"generationtime_ms":0.03254413604736328,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":46.0,"daily_units":{"time":"iso8601","precipitation_probability_max":"%"},"daily":{"time":["2026-11-09","2026-11-10"],"precipitation_probability_max":[90,83]}}
+R�ponse : Oui, je vous conseille toujours de prendre un parapluie, car de la pluie est pr�vue pour demain (le premier jour de votre nouveau s�jour).
+Question : Explique en une phrase ce qu'est une interface Java.
+R�ponse : En Java, une interface est un contrat abstrait qui d�finit un ensemble de m�thodes que les classes qui l'impl�mentent s'engagent obligatoirement � coder.
+Question : J'ai pr�vu d'aller aujourd'hui � Paris pour un s�jour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?
+API GET https://api.open-meteo.com/v1/forecast?latitude=48.856600&longitude=2.352200&daily=precipitation_probability_max&forecast_days=3
+HTTP 200 JSON BRUT : {"latitude":48.853382,"longitude":2.355208,"generationtime_ms":0.026345252990722656,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":36.0,"daily_units":{"time":"iso8601","precipitation_probability_max":"%"},"daily":{"time":["2026-11-09","2026-11-10","2026-11-11"],"precipitation_probability_max":[90,83,53]}}
+R�ponse : Oui, je vous conseille de mettre un parapluie dans votre valise, car de la pluie est pr�vue � Paris au cours de votre s�jour de 3 jours qui commence aujourd'hui.
+Question : J'ai pr�vu d'aller aujourd'hui � la ville de Zzyzx pour un s�jour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?
+R�ponse : Je ne connais pas les coordonn�es g�ographiques (latitude et longitude) de la ville de Zzyzx. Pourriez-vous me les fournir afin que je puisse v�rifier les pr�visions m�t�o pour vous ?

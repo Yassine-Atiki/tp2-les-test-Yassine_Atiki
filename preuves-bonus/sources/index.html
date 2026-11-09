@@ -1,0 +1,396 @@
+  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>TP 2 - LangChain4j</title>
+  <style type="text/css">
+  .rouge {
+	color: #F00;
+}
+  </style>
+  </head>
+  
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-54CZ03KHVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-WLXGZRM3K2');
+</script>
+  
+  <body>
+  
+    <h1 id="title">TP 2  - Un chat avec Jakarta EE (en particulier JSF) et LangChain4j</h1>
+    <p><a href="../index.html">Retour TPs</a></p>
+    <p>Vous allez utiliser l'API de <a href="https://gemini.google.com/app">Gemini</a>.</p>
+    <p>N'oubliez pas d'utiliser Git et GitHub.</p>
+    <p><a href="../../supports/langchain4j.pdf">Support de cours</a></p>
+  
+  <div id="topic-body">
+  <div><a name="a-title" id="a-title"></a></div>
+    <div>
+      <div id="page-top">
+        <div id="pageText">
+          <div id="section_1">
+              <div>
+                <ol>
+                      <li><a href="#introduction">Introduction</a></li>
+                      <li><a href="#description">Description de l'application</a></li>
+                      <li><a href="#testslangchain4j">Quelques tests avec LangChain4j</a>                      </li>
+                      <ul>
+                        <li><a href="#simple">Test 1</a> : Pour se chauffer</li>
+                        <li><a href="#couts">Test 2</a> : Coût en tokens</li>
+                        <li><a href="#template">Test 3</a> : Un traducteur</li>
+                        <li><a href="#embeddings">Test 4</a> : Embeddings</li>
+                        <li><a href="#rag1">Test 5</a> : RAG 1</li>
+                        <li><a href="#rag2">Test 6</a> : RAG 2</li>
+                        <li><a href="#outil">Test 7</a> : Utilisation d'outils</li>
+                      </ul>
+                      <li><a href="#appliweb">Application Web</a>                      </li>
+                      <ul>
+                        <li><a href="#partieweb">Partie Web</a></li>
+                        <li><a href="#accesllm">Classe pour travailler avec le LLM</a></li>
+                      </ul>
+                      <li><a href="#tokens">Optionnel : Nombre de tokens utilisés depuis le début de l'exécution</a></li>
+                      <li><a href="#streaming">Optionnel : streaming</a></li>
+                </ol>
+              
+            </div>
+            <div id="section_2"><a id="Introduction"></a>
+              <h2>Introduction</h2>
+              <p>Vous allez écrire à peu près la même application Web que dans le TP 1, un chat avec un LLM, mais en utilisant LangChain4j pour accéder à l'API du LLM (<a href="https://gemini.google.com/app">Gemini</a>). </p>
+              <p>Dans le TP 1 vous avez écrit une application qui utilisait directement les endpoints REST de l'API du LLM,  avec des documents JSON explicitement construits dans l'application.  LangChain4j permet de travailler à un plus haut niveau, sans s'occuper de la manipulation des documents JSON, qui est assez pénible et, surtout, qui est différente pour chaque LM.</p>
+              <h3>LangChain4j</h3>
+              <p>Le framework <a href="https://docs.langchain4j.dev/">LangChain4j</a> est actuellement un standard de facto pour l'utilisation des LLM en Java, et en particulier pour faire du <a href="https://en.wikipedia.org/wiki/Retrieval-augmented_generation">RAG</a>. Il permet un plus haut niveau d'abstraction.</p>
+              <p>LangChain4j est au départ une adaptation à Java de <a href="https://www.langchain.com/">LangChain</a> mais aujourd'hui les 2 projets ont évolué indépendamment et suivent des trajectoires distinctes. LangChain4j est un framework open source qui ajoute une couche d'abstraction aux APIs des LMs. Cette couche d'abstraction améliore la portabilité des applications (il est ainsi plus simple de changer de LM ou de base de données vectorielle, par exemple) et facilite l'utilisation des APIs. LangChain4j permet  d'enchainer aisément plusieurs interactions avec des LMs, et des traitements complémentaires ; par exemple</p>
+              <ul>
+                <li>Lecture de fichiers ou d'une base de données pour les faire prendre en compte par les LMs.</li>
+                <li>Accès Web pour vérifier une information donnée par un LM.              </li>
+                <li>Cadre pour écrire des applications multi-agents.</li>
+              </ul>
+              <p>Dépendance Maven à ajouter pour LangChain4j aux fichiers pom.xml de vos projets Java (choisissez le dernier numéro de version, à la place de 1.22.0 ; <strong>le numéro doit être le même pour toutes les dépendances</strong> liées à LangChain4j) :              </p>
+              <pre>
+&lt;dependency&gt;
+   &lt;groupId&gt;dev.langchain4j&lt;/groupId&gt;
+   &lt;artifactId&gt;langchain4j&lt;/artifactId&gt;
+   &lt;version&gt;1.22.0&lt;/version&gt;
+&lt;/dependency&gt;</pre>
+              <p>Dépendance Maven à ajouter en plus pour l'utilisation de l'API de Gemini avec LangChain4j :</p>
+              <pre>
+&lt;dependency&gt;
+   &lt;groupId&gt;dev.langchain4j&lt;/groupId&gt;
+   &lt;artifactId&gt;langchain4j-google-genai&lt;/artifactId&gt;
+   &lt;version&gt;1.22.0-beta32&lt;/version&gt;
+&lt;/dependency&gt;       </pre>
+              <h4>Ressources pour LangChain4j</h4>
+              <ul>
+                <li>Get started : <a href="https://docs.langchain4j.dev/get-started">https://docs.langchain4j.dev/get-started</a></li>
+                <li>Documentation en général : <a href="https://docs.langchain4j.dev/">https://docs.langchain4j.dev/</a></li>
+                <li>Javadoc (enregistrez cette URL dans vos favoris) : <a href="https://docs.langchain4j.dev/apidocs/index.html">https://docs.langchain4j.dev/apidocs/index.html</a>, <a href="https://langchain4j.github.io/langchain4j/apidocs/index.html">https://langchain4j.github.io/langchain4j/apidocs/index.html</a></li>
+                <li>Tutoriel : <a href="https://docs.langchain4j.dev/category/tutorials">https://docs.langchain4j.dev/category/tutorials</a>, <a href="https://langchain4j.github.io/langchain4j/tutorials/">https://langchain4j.github.io/langchain4j/tutorials/</a></li>
+                <li>Exemples de base : <a href="https://github.com/langchain4j/langchain4j-examples">https://github.com/langchain4j/langchain4j-examples</a>, <a href="https://github.com/langchain4j/langchain4j-examples/tree/main/other-examples/src/main/java">https://github.com/langchain4j/langchain4j-examples/tree/main/other-examples/src/main/java</a></li>
+                <li>Liste des noms des modèles dans l'API de Gemini : https://generativelanguage.googleapis.com/v1beta/models?key=AIzuuyDTjkuPHjBY... (collez ici votre clé Gemini).</li>
+                <li>Problèmes : <a href="https://github.com/langchain4j/langchain4j/issues">https://github.com/langchain4j/langchain4j/issues</a>            </li>
+              </ul>
+            </div>
+            <div> 
+            <h3><a name="description" id="description"></a>Description de l'application Web</h3>
+            <p>Vous aller refaire l'application Web du TP1  en utilisant LangChain4j. La seul différence est que vous n'aurez pas le mode &quot;debug&quot; qui affichait le JSON échangé entre le client de l'API et l'API (ce JSON dépend du LLM utilisé) :            </p>
+            <p><img src="img/chat.png" width="768" height="500" alt="Interface utilisateur du chat" /> </p>
+            <p>Voici à quoi va ressembler l'interface utilisateur de votre application après 3 échanges avec le LLM (affichés dans la zone de droite) :</p>
+            <p><img src="img/exemplechat.png" width="838" height="323" alt="Exemple de chat" /></p>
+            <p>Cette page aura un backing bean. Ce backing bean utilisera un bean CDI (une classe gérée par CDI pour les injections de dépendance) qui utilisera LangChain4j pour envoyer des requêtes à l'API du LLM.            </p>
+            <h2><a name="testslangchain4j" id="testslangchain4j"></a>Quelques tests avec LangChain4j</h2>
+            <p>Avant de vous lancer dans le projet d'application Web décrit ci-dessus, vous allez commencer par vous familiariser avec LangChain4j en écrivant quelques programmes courts qui utilisent les  classes de base de LangChain4j. </p>
+            <p>Ces programmes seront lancés avec une méthode <code>main</code> d'une classe Java ordinaire. <strong>Vous écrirez une classe par test (<code>Test1</code>, <code>Test2</code>, ...)</strong> ; chaque classe aura une méthode <code>main</code>. Pour chaque test, vous lancerez l'exécution de la classe de test. A la fin vous aurez donc autant de classes que de tests dans votre projet.</p>
+            <p>Comme pour tous les projets de ce cours, <a href="../tp0-jakartaee/git/git1.html">créez un reporitory GitHub pour ce projet</a>. <strong>Faites au moins un commit par test, suivi d'un push vers GitHub</strong>. N'oubliez pas d'insérer votre nom dans le projet et dans vos noms de package.</p>
+            <p>Pour ces tests, créez un <strong>projet Java ordinaire (pas un projet Web Jakarta EE comme pour les TPs 0 et 1) qui utilise Maven</strong>.</p>
+            <p>Par exemple, remplacez les &quot;xxxxxx&quot; (votre nom doit apparaitre) ; changez le nom et adaptez l'emplacement et le JDK (version <strong>25</strong> de Java) à votre configuration :</p>
+            <p><img src="img/creationprojettests.png" width="645" height="568" alt="Création du projet pour les tests" /></p>
+            <p>Commencez par ajouter les dépendances pour LangChain4j et Gemini dans pom.xml. N'oubliez pas de recharger/synchroniser pom.xml.</p>
+            <p>Aidez-vous du <a href="../../supports/langchain4j.pdf">support de cours sur LangChain4j</a> et de la <a href="https://docs.langchain4j.dev/apidocs/index.html">javadoc</a> pour écrire ces tests.</p>
+            <h3><a name="simple" id="simple"></a>Test 1 : Pour se chauffer...</h3>
+            <h4>Le code</h4>
+            <p>Le code de la classe <code>Test1</code> pose une question simple et affiche la réponse de l'API du LLM.</p>
+            <p>Vous allez utiliser la classe <a href="https://docs.langchain4j.dev/apidocs/dev/langchain4j/model/google/genai/GoogleGenAiChatModel.html">GoogleGenAiChatModel</a> qui implémente l'interface <a href="https://docs.langchain4j.dev/apidocs/dev/langchain4j/model/chat/ChatModel.html">ChatModel</a>. Une instance de cette classe est créée avec le pattern &quot;builder&quot;. Le nom du modèle est gemini-3.5-flash (ou un autre modèle de votre choix si celui-ci n'est pas disponible). Donnez une température de 0,7 (vous pourrez  tester d'autres valeurs).            </p>
+            <p><a href="../../supports/langchain4j.pdf">Consultez le cours</a> pour voir comment faire (&quot;Exemple simple&quot; vers le début du support).</p>
+            <h4>Test du code</h4>
+            <p>Testez en posant une question simple. </p>
+            <p>Dans un autre test demandez l'heure qu'il est. Copiez la question et la réponse dans l'email que vous allez envoyer pour ce TP. Dans l'email écrivez aussi une explication pour la réponse du LLM.</p>
+            <p>Encore un autre test :</p>
+            <ol>
+              <li>Dans une première &quot;question&quot;, dites &quot;Bonjour&quot; et présentez-vous en donnant votre nom.</li>
+              <li>Dans une deuxième question, demandez votre nom.</li>
+              </ol>
+            <p>Dans l'email pour ce TP copiez vos deux questions et les réponses du LLM, et expliquez.</p>
+            <p>&nbsp;</p>
+            <p>Commit et push quand tout fonctionne correctement. N'oubliez pas de la faire après chacun des tests à venir, si vous voulez un bonus.</p>
+            <p><strong><a name="configlogging" id="configlogging"></a>Remarque</strong> :  LangChain4j utilise SLF4J pour la façade de logging. Si SLF4J ne trouve pas de d'implémentation concrète pour le logging, il affiche cet avertissement au début de l'exécution :
+            <pre>
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.</pre>
+            <p>Si vous ne voulez plus le voir et surtout utiliser le logging, il suffit d'ajouter une dépendance pour une implémentation concrète. Par exemple, si vous voulez que LangChain4j utilise l'API de logging de Logback (c'est l'API la plus utilisée ; cherchez la dernière version de la dépendance) :</p>
+            <pre>&lt;dependency&gt;
+    &lt;groupId&gt;ch.qos.logback&lt;/groupId&gt;
+    &lt;artifactId&gt;logback-classic&lt;/artifactId&gt;
+    &lt;version&gt;1.6.5&lt;/version&gt; <!-- version SLF4J -->
+&lt;/dependency&gt;</pre>
+            <p>Dans le répertoire main/resources du projet, ajouter un fichier <a href="logbackxml.html">logback.xml</a> pour la configuration de Logback. </p>
+            <p><strong><em>Optionnel</em></strong> : Pour ceux qui veulent des détails sur ce fichier logback.xml :</p>
+            <ul>
+              <li>L'appender définit la sortie standard de l'application (la console) comme  destination pour les logs, avec le format des messages.</li>
+              <li>Le logger cible le code de LangChain4j (package &quot;dev.langchain4j&quot;) et fixe le niveau de journalisation à INFO (tous les événements de niveau INFO, WARN et ERROR seront traités ; les niveaux DEBUG et TRACE seront ignorés).</li>
+              <li>Le fait d'avoir isolé LangChain4j permettrait, par exemple, de laisser le niveau à INFO pour LangChain4j et de mettre le niveau à WARN pour le reste pour s'intéresser plus particulièrement à LangChain4j. Pour le moment, le niveau est le même quels que soient les packages.</li>
+            </ul>
+            <h4>Correction</h4>
+            <p><a href="correction/test1/index.html">Code</a></p>
+            <h3><a name="couts" id="couts"></a>Test 2 : Coût en tokens</h3>
+            <p>Classe <code>Test2Couts</code>.</p>
+            <p>Posez la même question que pour le test 1. Faites afficher la réponse et en plus le coût en tokens de la requête (pour les entrées et aussi pour les sorties). En supposant que les coûts sont ceux indiqués dans <a href="../tp1-api-direct/gemini/couts.html">cette page</a>, donnez le coût en dollars de la requête pour le modèle gemini-3.5-flash-lite. Vous pouvez mettre à jour les données en vous basant sur <a href="https://ai.google.dev/gemini-api/docs/pricing">cette autre page</a> pour les modèles Gemini ou sur <a href="https://openrouter.ai/models">cette liste</a> bien plus large qui vous permet de filtrer par de multiples critères. </p>
+            <p>Déduisez alors le nombre de requêtes similaires qu'il faudrait lancer pour dépenser 1 dollar.</p>
+            <p>Utilisez une des méthodes de <code>ChatMessage</code> qui retourne une instance de <code>ChatResponse</code> pour avoir les nombres de tokens.</p>
+            <h3><a name="template" id="test6"></a>Test 3 : Un traducteur</h3>
+            <p>Classe <code>Test3Traducteur</code>.</p>
+            <p>Comme le test 1 mais vous allez ajouter l'utilisation des  classes <a href="https://docs.langchain4j.dev/apidocs/dev/langchain4j/model/input/PromptTemplate.html">PromptTemplate</a> et <a href="https://docs.langchain4j.dev/apidocs/dev/langchain4j/model/input/Prompt.html">Prompt</a>.            </p>
+            <p>Utilisez le PromptTemplate qui pourrait convenir pour un traducteur,  avec une variable pour le texte à traduire. Le prompt pourrait, par exemple, correspondre à &quot;Traduis le texte suivant en anglais : ****&quot;, avec la valeur de &quot;****&quot; donnée par un paramètre du template.            </p>
+            <p>La même chose mais avec un template qui prend 2 paramètres : un pour la langue de traduction et l'autre pour le texte à traduire.</p>
+            <h4>Correction</h4>
+            <p><a href="correction/test2/index.html">Code</a></p>
+            <h3><a name="embeddings" id="embeddings"></a>Test  4 : Embeddings</h3>
+            <p>Classe <code>Test4Embeddings</code>.            </p>
+            <p>Le programme que vous allez écrire utilise un modèle d'embeddings pour  calculer la similarité de 2 phrases par la métrique du cosinus appliquée à leurs embeddings.</p>
+            <p>LangChain4j a des modèles d'embeddings intégrés et qui ne coûtent rien en tokens, mais ils ont été entrainés avec des textes en anglais et les scores de similarités fournis peuvent être vraiment mauvais sur des textes en français. Pour cet exercice commencez à en utiliser un (<code>BgeSmallEnV15EmbeddingModel</code>, utilisé par EasyRAG, vu dans l'exercice suivant) pour éviter de rogner sur votre quota. <a href="#modeleexterne">A la fin de l'exercice</a>, passez à un modèle d'embeddings plus performant. Si vous ne l'avez pas déjà lue, lisez <a href="../tp1-api-direct/limitesdebit.html">cette page</a> qui donne quelques conseils pour économiser les coûts en tokens.</p>
+            <p>Donnez au moins 6 couples de phrases pour voir la similarité. Par exemple le premier couple contient 2 phrases similaires et le deuxième 2 phrases opposées. La valeur de similarité en elle-même n'est pas ce qui importe le plus. Il est surtout important que des phrases similaires aient une valeur de similarité supérieure à des phrases non similaires. En effet, cette valeur de similarité sera utilisée par le RAG pour choisir, par exemple, les 5 documents les plus similaires à une question parmi tous les documents enregistrés.</p>
+            <p>Pour récupérer les embeddings à partir des réponses du modèle d'embeddings, utilisez la méthode <code>content()</code>.</p>
+            <p>Pour calculer la similarité, utilisez la classe <code>CosineSimilarity</code> (cherchez dans la javadoc ou le support de cours). En théorie, les valeurs retournées par la méthode <code>between</code> vont de -1 à 1 mais, avec les modèles d'embedding les plus utilisés, elles sont le plus plutôt comprises entre  0,5 à 1. Remarque : la plage des valeurs pour la similarité n'est pas importante. Par exemple, dans le cas du RAG (voir les questions suivantes), si l&rsquo;on compare un texte T à une liste de textes, on souhaite que les n textes ayant la plus forte similarité avec T soient ceux dont le sens est le plus proche de T et la plage des valeurs n'est pas significative.</p>
+            <p> <a name="modeleexterne" id="modeleexterne"></a>Quand le code vous semble correct,   utilisez un modèle d'embedding externe fourni par Google (une classe Java fournie pas LangChain4j facilite son utilisation et votre clé Gemini peut être utilisée) qui se comporte mieux avec des phrases en français, et en d'autres langues. Laissez l'ancien code en commentaire ou, mieux, gardez les 2 modèles d'embeddings pour comparer leurs résultats sur les 5 phrases.</p>
+            <p>Une des difficultés est de trouver le bon nom de modèle pour les embeddings. La liste des noms de modèles externe de  Google peut être obtenue en tapant cet URL dans un navigateur :<br />
+              https://generativelanguage.googleapis.com/v1beta/models?key=AIzuuyDTjkuPHjBY... (collez ici votre clé Gemini). Attention, le nom du modèle à mettre dans le code est le nom qui est après &quot;models/&quot; dans la liste des modèles. Utilisez par exemple le nom de modèle &quot;gemini-embedding-001&quot;.</p>
+            <p><em><strong>Optionnel</strong></em> (les parties optionnelles du cours et des TPs vous permettent d'en savoir un peu plus ; vous pouvez les ignorer si vous êtes à court de temps) : <a href="embeddingmodels.html">Cette page</a> pourra vous aider à faire le meilleur choix du modèle d'embeddings pour vos autres projets.</p>
+            <p>Pour écrire le code Java avec le modèle d'embedding de Google, allez voir l'interface <code><a href="https://docs.langchain4j.dev/apidocs/dev/langchain4j/model/embedding/EmbeddingModel.html">EmbeddingModel</a></code> et la classe <code><a href="https://docs.langchain4j.dev/apidocs/dev/langchain4j/model/google/genai/GoogleGenAiEmbeddingModel.html">GoogleGenAiEmbeddingModel</a></code> dans la javadoc de LangChain4j. Utilisez le design pattern &quot;builder&quot; pour créer une instance de <code>GoogleGenAiEmbeddingModel</code>. Pour le type de tâche, choisissez <code>TaskTypeEnum.SEMANTIC_SIMILARITY</code> puisque vous voulez calculer une similarité. Pour la durée du timeout, utilisez la classe <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/Duration.html"><code>Duration</code></a> du JDK ; essayez 100 ms et augmentez si ça ne suffit pas.            </p>
+            <p> <strong>Copiez les couples de phrases et leur similarité dans l'email que vous allez envoyer.</strong> Si des résultats vous semblent curieux, ou si vous voyez des grosses différences de qualité entre le modèle intégré et le modèle externe, signalez-les.</p>
+            <h4>Correction</h4>
+            <p><a href="correction/test3/index.html">Code</a>            </p>
+            <h3><a name="rag1" id="rag1"></a>Test 5 : RAG 1, pour vous donner envie de voir la suite du cours ;-)</h3>
+            <p>Classe <code>Test5Rag1</code>.</p>
+            <h4>Introduction</h4>
+            <p>Tout d'abord, reprenez le test 1 et posez la question &quot;Comment s'appelle le chat de Pierre ?&quot;. Voyez la réponse du LLM.</p>
+            <p>Maintenant, ajoutez un fichier texte &quot;infos.txt&quot; à la racine de votre projet Java. Voici son contenu :
+            <pre>
+Le nom du chien de Jacques est Médor.
+Le nom du chat de Pierre est Felix.
+La capitale de la France est Paris.</pre>
+<p>Créez une nouvelle classe de test.</p>
+<p>Pour ce test <a href="rag.html">le code vous est donné</a>, mais vous devez essayer de le comprendre.</p>
+<p><strong>Attention</strong>, </p>
+<ul>
+  <li>Vous devez  ajouter <a href="dependance.html">une dépendance</a> dans pom.xml pour que le code fonctionne. N'oubliez pas de faire une reload/sync de pom.xml. Vous allez peut-être avoir un message de vulnérabilité pour cette dépendance mais vous pouvez l'utiliser quand même ; rien de dangereux pour ce que vous allez en faire.</li>
+  <li>Vous devez mettre en commentaire (ne la retirez pas) la dépendance que vous avez ajoutée pour le modèle d'embeddings intégré de l'exercice précédent pour éviter un conflit avec le modèle d'embeddings utilisé par le dépendance &quot;easy-rag&quot;.</li>
+</ul>
+<p>Le code utilise un service IA avec une interface Java <code>Assistant</code> implémentée par LangChain4j, qui est utilisée pour un chat avec le LLM (toute la &quot;magie&quot; de l'implémentation est effectuée par la classe <code>AiServices</code>). Vous pouvez choisir le nom de la méthode de l'interface.</p>
+<p>Exécutez la méthode <code>main</code> de la classe (ignorez les éventuels message &quot;DEBUG&quot; ou &quot;WARNING&quot;). Alors ? Vous venez d'utiliser le <strong>RAG</strong> (Retrieval-Augmented Generation) : des informations ont été fournies au LLM pour qu'il génère de meilleures réponses  à certaines questions. C'est comme cela que les entreprises peuvent fournir au LLM des informations récentes ou non publiques. Optionnel : Si vous voulez ne plus voir les messages &quot;DEBUG&quot;, il faut <a href="logbackpourdebug.html">configurer Logback</a>.</p>
+<p>Remplacez la question du programme par celle-ci : &quot;Pierre appelle son chat. Qu'est-ce qu'il pourrait dire ?&quot;. La réponse du LLM devrait mieux vous montrer que le LLM a utilisé ses capacités linguistiques acquises pendant son entrainement et les informations du fichier infos.txt pour répondre à votre question.</p>
+<p>Que se passe-t-il si vous modifiez la dernière ligne du fichier infos.txt, en disant que Marseille est la capitale de la France et que vous demandez la capitale de la France au LLM ? Testez. <strong>Sans configuration particulière, les informations récupérées par le RAG l'emportent sur les connaissances acquises pendant l'entrainement de base</strong>. Cependant, il est possible que le LLM indique que l'information est incorrecte car il a  appris pendant son entrainement que la capitale de la France est Paris. La réponse dépend du LLM et même de la version du LLM. Cette règle de priorité participe à la réduction des hallucinations du LLM car les documents utilisés par le RAG sont normalement très fiables.</p>
+<h3><a name="rag2" id="rag2"></a>Test 6 : RAG 2, encore plus fort</h3>
+<p>Classe <code>Test6Rag2</code>.</p>
+<p>Bon, ce que fait le programme n'est quand même pas extraordinaire en utilisant un PDF au lieu d'un simple fichier texte pour enrichir les connaissances du LLM.</p>
+<p>Créez une classe Test6Rag2. Copiez le code de Test5Rag1 en l'adaptant.</p>
+<p><strong>Pour avoir une conversation avec l'assistant</strong> : Avec Test5Rag1, à chaque nouvelle question posée à l'assistant vous devez recompiler le programme. Voici du <a href="conversation.html">code</a> qui va vous permettre de poser plusieurs questions à l'assistant dans une même session. Utilisez-le. Vous remarquerez que la conversation est possible car une mémoire a été ajoutée au moment de la création de l'assistant (déjà dans Test5Rag1).</p>
+<p>Vous allez donc copier le PDF du support de cours sur le machine learning à la racine du projet et, dans le code qui vous a été donné, remplacez infos.txt par le nom du fichier PDF. Cette fois-ci, comme le fichier est de grande taille, il va être découpé en morceaux et les embeddings des morceaux vont être enregistrés avec les morceaux dans la base de données vectorielle en mémoire (relisez le code pour mieux comprendre). Le découpage en morceaux va permettre de ne pas noyer le LLM dans un très grand nombre d'informations qui ne lui seront pas nécessairement utiles pour répondre à une question. Seuls les morceaux &quot;similaires&quot; à la question seront retrouvées par le RAG.</p>
+<p>Posez une question dont la réponse est dans le support ; par exemple &quot;Quel est l'objectif du cours 'Agents conversationnels en Java avec LangChain4j' de Richard Grin ?&quot;. Pour répondre, les morceaux du fichier PDF les plus pertinents pour répondre à la question vont être ajoutés à la question, et le tout va être envoyé au LLM, ce qui va permettre d'obtenir une bonne réponse. Vous pouvez même essayer de lui demander dans quelle diapo il a trouvé l'information. C'est déjà plus intéressant, non ?</p>
+<p>Il se peut que les réponses à vos questions ne vous conviennent pas. Plusieurs raisons peuvent l'expliquer :</p>
+<ul>
+  <li>Le <a href="rag.html">code</a> qui vous a été fourni est très simple car il utilise des classes par défaut pour les embeddings, qui ne sont pas bien adaptées au français. La notion de &quot;similarité&quot; peut donc être approximative. Vous verrez dans le TP 4 comment utiliser un modèle d'embeddings de votre choix. Mais attention, si vous avez un compte gratuit, l'utilisation d'un modèle d'embedding externe comme celui de l'<a href="#embeddings">exercice sur les embeddings ci-dessus</a> aurait pu provoquer une erreur de quota en une seule exécution (le modèle d'embeddings va calculer l'embedding de tous les segments, et vous êtes limité dans le nombre de requêtes par minute).</li>
+  <li>La phase d'ingestion (au début) utilise une configuration par défaut qui peut ne pas convenir, En particulier, le nombre de tokens de chaque segment peut ne pas convenir. Le TP 4 vous montrera comment modifier les valeurs par défaut.</li>
+  <li>Le fichier PDF &quot;brut&quot;, sans aucune préparation, que vous avez utilisé est découpé en morceaux de tailles fixes par défaut. Cependant ce fichier contient plusieurs slides par page et le découpage a peu de chance de correspondre à un découpage efficace. Si vous êtes intéressé, vous verrez dans le TP 4 une partie optionnelle qui fait un meilleur découpage.</li>
+</ul>
+<p><strong>Conclusion</strong> : </p>
+<p>Un LLM peut parfois se tromper, broder et même inventer des informations, c'est son péché mignon. C'est pour cela qu'il faut parfois lui mettre des garde-fous. </p>
+<p>Les connaissances qu'il a acquises viennent de son entrainement durant lequel il n'a pu consulter les documents privés des entreprises, et elles datent de la fin de cet entrainement.</p>
+<p>Le RAG permet de lui fournir  des informations supplémentaires au moment de chaque question, sur lesquels il peut  s'appuyer. Mais  le RAG n'est pas infaillible ; le LLM peut encore ne pas donner la bonne information, avec le bonne façon de le dire. Il faut toujours faire de nombreux tests, avec intervention humaine, avant de mettre en production une application qui utilise une IA. </p>
+<p>Une bonne préparation des documents sources utilisés par le RAG  (ici le seul fichier PDF du support de cours) est aussi le plus souvent nécessaire ; vous en verrez un exemple dans le <a href="http://richard.grin.free.fr/emsi/casablanca-ia/tp/tp4-rag/index.html#naif">TP sur le RAG</a>. Une bonne configuration du RAG est aussi nécessaire.</p>
+<p>Evidemment, les RAGs réels ne se limitent pas à consulter un seul fichier. Vous verrez dans le cours sur le RAG que les embeddings créés à partir de multiples fichiers ou bases de données de l'entreprise, de types divers (texte, pdf, docx, image pour certains LLMs,...), peuvent être enregistrés dans une base de données vectorielle persistante (pas un entrepôt conservé dans la mémoire, comme pour cet exemple).</p>
+<h4><strong>Pour obtenir le bonus pour ce TP : Dans l'email pour signaler que vous avez fini cette partie du TP, en plus de l'URL du dépôt GitHub de votre projet, écrivez une des questions que vous avez posée et la réponse du LLM</strong>.</h4>
+<h3><a name="outil" id="outil"></a>Test 7 : Utilisation d'outils</h3>
+<p>Classe <code>Test7Outils</code>.</p>
+<p>Exécutez Test 2 en posant la question &quot;Je dois partir dans 2 jours à Paris ; j'y resterai 3 jours. Est-ce que je dois mettre un parapluie dans mes valises ?&quot;. Est-ce que l'IA vous donne une réponse qui vous convient ? <strong>Vous copierez la question et la réponse dans l'email que vous allez envoyer pour ce TP</strong>.</p>
+<p>Vous venez de voir comment récupérer des informations depuis des fichiers privés mais ça n'est pas suffisant pour répondre à certaines questions.</p>
+<p>Des outils peuvent étendre les fonctionnalités d'un LLM. Un outil pourra, par exemple, faire des calculs mathématiques complexes, manipuler des bases de données, accéder au Web, gérer des emails, ce qu'un LLM ne peut pas faire de base. Les outils sont importants ; ils sont en particulier utilisés pour écrire des agents IA qui peuvent effectuer des tâches complexes. Les chatbots qui utilisent les LLMs (comme les applications ChatGPT, Gemini ou Claude Desktop) intègrent déjà des outils  et  permettent d'ajouter  d'autres outils.</p>
+<p>Pour ce test, vous allez permettre au LLM d'utiliser un outil pour avoir des prévisions météo. De base, un LLM n'a pas de connaissances en temps réel. Son savoir se limite aux informations présentes dans les données utilisées lors de son entrainement.</p>
+<p>LangChain4j vous permet d'écrire l'outil en Java et de le rendre utilisable par le LLM facilement (voir <a href="../../supports/langchain4j.pdf">cours</a>).</p>
+<p>L'outil va permettre au LLM de connaitre les prévisions météo pour les précipitations dans un lieu défini par sa latitude et sa longitude. Il sera basé sur l'API <a href="https://open-meteo.com/">Open-Meteo</a> qui est open-source, d'accès gratuit et ne nécessite pas de clé. Documentation de Open-Meteo : <a href="https://open-meteo.com/en/docs">https://open-meteo.com/en/docs</a>.</p>
+<p>Paris  a la latitude 48,85 et la longitude 2,35. Commencez par tester l'API en tapant directement cette URL dans votre navigateur : <a href="https://api.open-meteo.com/v1/forecast?latitude=48.85&amp;longitude=2.35&amp;daily=precipitation_probability_max&amp;forecast_days=3">https://api.open-meteo.com/v1/forecast?latitude=48.85&amp;longitude=2.35&amp;daily=precipitation_probability_max&amp;forecast_days=3</a>. Vous allez obtenir les probabilités maximales d'avoir de la pluie pour les 3 jours à venir, jour courant compris, pour la ville de Paris sous la forme d'un document JSON de ce type (pourcentages de chance d'avoir de la pluie pour les 3 jours dans tableau &quot;precipitation_probability_max&quot;) :</p>
+<pre>{
+  "latitude": 48.853382,
+  "longitude": 2.355208,
+  "generationtime_ms": 0.0524520874023438,
+  "utc_offset_seconds": 0,
+  "timezone": "GMT",
+  "timezone_abbreviation": "GMT",
+  "elevation": 46,
+  "daily_units": {
+    "time": "iso8601",
+    "precipitation_probability_max": "%"
+  },
+  "daily": {
+    "time": [
+      "2026-03-09",
+      "2026-03-10",
+      "2026-03-11"
+    ],
+    <strong>"precipitation_probability_max": [10, 13, 98]</strong>
+  }
+}
+</pre>
+<p>Le <a href="../../supports/llm.pdf">cours</a> vous explique comment un LLM peut utiliser un outil  (pas vraiment évident...). C'est bien plus simple <a href="../../supports/langchain4j.pdf">en utilisant LangChain4j</a> car il suffit d'écrire une méthode Java et de l'annoter par <code>@Tool</code>. <a href="aide/outil/Open-Meteo/codeoutil1.html">Voici une classe MeteoTool</a>. Le paramètre de <code>@Tool</code> doit être assez clair pour que le LLM sache s'il a besoin de l'outil pour répondre à une requête.</p>
+<p>Commencez par tester cette classe en faisant afficher la météo d'une ville que vous choisissez. Ecrivez une classe <code>TestMeteo</code> qui utilise la méthode <code>isPluiePrevue</code> de la classe <code>MeteoTool</code>. Vous pouvez jouer sur la variable <code>seuilPluie</code> pour tester le bon fonctionnement de cette méthode.</p>
+<p>Il vous reste à</p>
+<ul>
+  <li>&Eacute;crire le code de l'assistant IA. C'est une simple interface Java que vous appelerez <code>Assitant</code> (par exemple) ; aidez-vous du cours sur AiServices et du <a href="rag.html">code du test 5</a> (c'est le même type de code que l'interface <code>Assistant</code>) ; pour ce test, écrivez l'interface dans un fichier à part.</li>
+  <li>&Eacute;crire le code de la classe principale <code>Test7Outils</code> (avec la méthode <code>main</code>) qui crée un <code>ChatModel</code>, puis un assistant (de type <code>AssistantMeteo</code>) et démarre la conversation (comme dans <code>Test6</code>). Pour créer l'assistant, il faut indiquer que le LLM peut utiliser l'outil s'il le souhaite :
+    <pre>AssistantMeteo assistant = 
+  AiServices.builder(AssistantMeteo.class)
+            .chatModel(model)
+            .chatMemory(MessageWindowChatMemory.withMaxMessages(<strong>20</strong>)) // L'utilisation des outils génère des messages
+            .<strong>tools(new MeteoTool())  // Ajout de l'outil</strong>
+            .build();</pre>
+  </li>
+</ul>
+<p><a name="questions1" id="questions1"></a>Pour tester (<strong>notez bien ces questions et les réponses car elles vous seront demandées pour le bonus</strong>)</p>
+<ul>
+  <li>Demandez    (reprenez les valeurs que vous avez testées ci-dessus pour faciliter la vérification) &quot;J'ai prévu d'aller aujourd'hui à la ville dont la latitude est 48.85 et la longitude est 2.35 pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?&quot;, ou une question du même type. Vous pouvez continuer par (choisissez le jour du départ pour pouvoir faire des vérifications) &quot;Finalement, je ne vais partir que demain. Est-ce que tu me conseilles de prendre un parapluie ?&quot;. Si besoin est, modifiez le seuil du début de la méthode de la classe <code>MeteoTool</code> pour tester le bon fonctionnement.</li>
+  <li>Envoyez  au LLM une requête qui n'a rien à voir avec les prévisions météo pour les précipitations, pour voir comment il réagit.</li>
+  <li>Demandez &quot;J'ai prévu d'aller aujourd'hui à ... (donnez une ville mondialement connue) pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?&quot;. Il est possible que le LLM  ait appris les coordonnées de ... et il répondra à la question. Remplacez &quot;...&quot; par &quot;Zzyzx&quot; (oui, cette ville existe !) et le LLM ne pourra sans doute pas répondre.</li>
+  </ul>
+<p>Si tout fonctionne correctement, commit et push.</p>
+<h4>Géolocalisation</h4>
+<p>Pas très commode de donner la latitude et la longitude !</p>
+<p>Vous allez utiliser une autre API de Open-Meteo : <a href="https://open-meteo.com/en/docs/geocoding-api">https://open-meteo.com/en/docs/geocoding-api</a>.</p>
+<p>Pour vous aider, je vous donne le code d'une <a href="aide/outil/Open-Meteo/codeoutil2.html">autre méthode</a> que vous allez ajouter à la classe <code>MeteoTool</code>. Elle prend en paramètre un nom de ville (en anglais) et elle retourne un tableau contenant la lattitude et la longitude de la ville. S'il existe plusieurs villes qui ont ce nom dans le monde, la méthode prend la première ville ; pour lever l'ambiguïté, il suffit de préciser le nom de la ville. Par exemple, &quot;Rabat,Morocco&quot; (nom de la ville et du pays doivent être en anglais) au lieu de &quot;Rabat&quot;. Mais l'objet de cet exercice n'est pas l'utilisation de l'API de géolocalition, ne compliquez pas les choses. <strong>Il vous reste à écrire l'annotation <code>@Tool</code> qui convient, ainsi que d'annoter le paramètre de la méthode</strong>.</p>
+<p>Est-ce que le LLM va savoir utiliser ce nouvel outil en le combinant avec le premier outil ? Testez en ayant la même conversation que pour le début de ce test, mais en indiquant la ville par son nom. Par exemple &quot;J'ai prévu d'aller aujourd'hui à Paris pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?&quot;.</p>
+<p>Si tout fonctionne correctement, commit et push.</p>
+<p>Posez une question qui n'a rien à voir avec la météo. Il devrait répondre ; s'il ne le fait pas, vous pouvez le recadrer avec un message système pour l'assistant (voir cours). Posez aussi  une autre question sur la météo d'une ville qui n'existe pas pour voir comment le LLM réagit.</p>
+<h4><a name="utilisationlogging" id="utilisationlogging"></a>Utilisation logging</h4>
+<p>Vous allez utiliser le logging pour mieux comprendre comment les outils sont utilisés.</p>
+<p>Si vous ne l'avez pas déjà fait, <a href="#configlogging">configurez le logging pour LangChain4j</a>.</p>
+<p>Indiquez que vous voulez un logging des requêtes et réponses du LLM : lors de la création du modèle, ajoutez l'appel à &quot;<code>logRequestsAndResponses(true)</code>&quot; dans le builder.</p>
+<p>Remarque : si vous utilisez  un LM local avec Ollama, cette méthode n'existe pas dans le builder de <code>OllamaChatModel</code>. Pour avoir des informations équivalentes à celles fournies par cette méthode, ajoutez un listener au modèle (voir support de cours sur LangChain4j, section &quot;Observabilité&quot;).</p>
+<p>Relancez l'application (pour éviter de trainer tout l'historique depuis le début) et demandez la question suivante :<br />
+  J'ai prévu d'aller aujourd'hui à la ville de Zzyzx pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?</p>
+<p>Lisez le logging pour comprendre les échanges entre votre application et le LLM (ces échanges sont initiés automatiquement par LangChain4j pour vous faciliter la tâche). Vous allez devoir copier le JSON et expliquer ces échanges dans l'email final pour obtenir un bonus.</p>
+<h3>Bonus pour cette première partie du TP</h3>
+<p><strong>Pour obtenir un bonus, vous envoyez un email avec le sujet (respectez le format demandé pour tous les emails) qui contient &quot;TP 2 - tests terminé&quot;.</strong> Noubliez pas d'y écrire tout ce qui vous a été demandé jusqu'à maintenant, et le lien vers le dépôt GitHub pour tous les tests.</p>
+<p><strong>Résumé de ce qui est demandé dans  le texte de l'email (pas dans un fichier joint ou ailleurs), </strong></p>
+<ul>
+  <li><strong>(Test &quot;Pour se chauffer&quot;)</strong> Question et réponse pour l'heure qu'il est, et vos explications.</li>
+  <li><strong>(Test &quot;Pour se chauffer&quot;)</strong> Questions et réponses pour votre nom, et vos explications.</li>
+  <li><strong>(Test &quot;Embeddings&quot;)</strong> Copiez les couples de phrases et leur similarité.</li>
+  <li><strong>(RAG 1)</strong> Copiez la réponse du LM quand vous lui avez demandé la capitale de la France après avoir écrit Marseille dans le fichier infos.txt.</li>
+  <li><strong>(Test &quot;RAG 2, encore plus fort&quot;)</strong> Copiez une des questions que vous avez posée et la réponse du LLM.</li>
+  <li><strong>(Test &quot;Utilisation d'outils&quot;)</strong> 
+    <ul>
+      <li>Copiez la question et la réponse sans utilisation des outils. </li>
+      <li>Avec utilisation des outils : copiez les <a href="#questions1">premières questions</a> (sur le parapluie), et les réponses du LLM. (et dans votre code n'oubliez pas la classe <code>TestMeteo</code> pour tester l'API météo). </li>
+    </ul>
+  </li>
+  <li><strong>IMPORTANT ! (Test &quot;Utilisation d'outils&quot;) Après l'ajout du deuxième outil et l'activation du logging, copiez les parties (il y en a plusieurs) du JSON qui sont liées à l'utilisation des outils. Ajoutez (en caractères gras dans le JSON)  l'utilité de chaque partie, en précisant bien qui a envoyé cette partie du JSON, et en disant s'il s'agit d'une requête ou bien d'une réponse à une requête.</strong> Ne donnez que les parties nouvelles, pas les répétitions dues à l'envoi de l'historique. Vous pouvez vous aider du cours pour ne rien oublier. Attention, il y a 2 outils, et donc plus d'échanges entre votre application et le LLM.</li>
+  <li><strong>(Test &quot;Utilisation d'outils&quot;) </strong>Avec les 2 outils, si vous ajoutez tous les tokens utilisés pour répondre à une seule question (pluie ou pas dans une ville dont vous donnez  le nom), vous obtiendrez sans doute plusieurs milliers de tokens. Dites dans l'email comment il serait possible d'économiser une partie de ces tokens (et donc de l'argent) en écrivant un nouvel outil (on ne vous demande pas de l'écrire).</li>
+</ul>
+<h2><a name="appliweb" id="appliweb"></a>Application Web</h2>
+            <p>Revenons maintenant à l'application Web.</p>
+            <h3>Création de l'application</h3>
+            <p>Comme dans les TP précédents, <a href="../tp0-jakartaee/index.html#creaprojet">créez une nouvelle application Web avec Maven</a>, et un <a href="../tp0-jakartaee/git/git1.html#creationgithub">nouveau repository GitHub</a>.</p>
+            <p>Commit et GitHub.</p>
+            <h3><a name="partieweb" id="partieweb"></a>Partie Web</h3>
+            <h4>Page JSF</h4>
+            <p>Vous connaissez déjà l'interface utilisateur. C'est celle du TP 1, sans le mode debug.            </p>
+            <p>Créez la page JSF comme dans les 2 premiers TPs. Le plus simple est de reprendre le <a href="../tp0-jakartaee/correction/page.html">code du TP 0 pour la page JSF</a>. Reprenez aussi le <a href="../tp0-jakartaee/correction/ressources.html">code des fichiers mycsslayout et script.js</a>, à placer au bon endroit pour JSF, c'est-à-dire dans les répertoires webapp/resources/css et webapp/resources/js d'après le code de la page JSF (dans le header). </p>
+            <p>Ajoutez une dépendance pour PrimeFaces dans pom.xml.</p>
+            <p><strong>N'oubliez pas le commit Git et GitHub..</strong>.</p>
+            <h4>Backing bean</h4>
+            <p> La portée du backing bean sera &quot;view&quot; afin de garder facilement les informations sur la conversation (c'est un chat...) entre l'utilisateur et l'API.</p>
+            <p>Le code est similaire au code du backing bean des TP 0 et TP 1. La différence avec le TP 1 est que vous n'aurez pas à gérer le JSON et donc le backing bean va s'adresser directement au client de l'API du LLM. Le plus simple est sans doute de partir du code du <a href="../tp0-jakartaee/correction/backingbean.html">backing bean du TP 0</a> et de modifier le code de la méthode <code>envoyer()</code> pour faire appel à la classe <code>LlmClient</code> décrite ci-dessous pour poser une question au LLM et recevoir une réponse.</p>
+            <p>Le backing bean injecte donc une instance de la classe <code>LlmClient</code> à laquelle il délègue l'interface avec l'API du LLM.</p>
+            <p>Git et GitHub...</p>
+            <h4>Quelques détails encore pour la partie Web</h4>
+            <p>Comme pour les TPs précédents, modifiez web.xml pour que <a href="../tp0-jakartaee/index.html#welcomefilelist">l'application démarre sur la page JSF</a>.</p>
+            <h3><a name="accesllm" id="accesllm"></a>Classe pour travailler avec le LLM</h3>
+            <p>La classe Java <code>LlmClient</code> est la classe &quot;métier&quot;, celle qui est liée au LLM choisi (Gemini).            </p>
+            <p>Cette classe s'appuie sur LangChain4j. Vous allez vous aider du support de cours, des tests précédents et de ce qui suit pour écrire le code de cette classe. Commencez par la créer dans un package dont le nom se termine par &quot;llm&quot;.</p>
+            <p>Puisqu'une instance de cette classe va être injectée dans le backing bean, la classe doit être annotée par une &quot;portée&quot; CDI. <code>@Dependent</code> convient ; l'instance de la classe sera supprimée quand l'instance du backing bean sera supprimée. Il faut aussi ajouter que la classe implémente <code>Serializable</code> ; en effet, le backing bean l'implémente (puisque de portée &quot;vue&quot;) et donc toutes les classes des instances qu'il contient doivent l'implémenter.</p>
+            <p>Ajoutez dans pom.xml les dépendances pour travailler avec LangChain4j et Gemini (pas besoin de la dépendance pour easy-rag).</p>
+            <p>Voici  quelques compléments pour vous aider.            </p>
+            <h4><a name="service" id="service"></a>Service IA</h4>
+            <p>LangChain4j utilise la notion de &quot;service IA&quot;. Cette notion facilite l'écriture pour les cas plus complexes en ce plaçant à un plus haut niveau d'abstraction que le code de base donné par LangChain4j. Elle peut aussi être utilisée pour les cas simples. Vous avez utilisé un service IA dans les tests sur le RAG ci-dessus.            </p>
+            <p>Un service IA définit un comportement pour des échanges de messages entre l’application et le LLM.  </p>
+            <p>Le développeur définit une interface Java qui contient les méthodes qui correspondent aux interactions que son application aura avec le LLM. Vous mettez dans cette interface les méthodes que vous voulez. LangChain4j fournira automatiquement une implémentation de cette interface avec un objet proxy (vous n'avez pas besoin d'implémenter l'interface). Les méthodes de l'interface seront des échanges de messages (questions et réponses) entre l’application et le LLM ; LangChain4j tient compte des types des paramètres, du type retour et des annotations des méthodes pour fournir l'implémentation de l'interface Java.</p>
+            <p>Pour ce projet l'interface sera très simple, avec une seule interaction  qu'on appelera <code>chat</code> (on peut choisir le nom que l'on veut) : une question (prompt) est envoyée au LLM et il répond :</p>
+            <pre>public interface Assistant {
+  String chat(String prompt);
+}</pre>
+            <p>La classe <code>AIServices</code> de LangChain4j permet de créer une &quot;instance de cette interface&quot; (en fait c'est une instance de la  classe &quot;proxy&quot; créée par LangChain4j, qui implémente l'interface). La classe <code>LlmClient</code> utilise cette instance   pour envoyer des messages à l'API du LLM.</p>
+            <p>Créez cette interface dans le même package que la classe <code>LlmClient</code>.</p>
+            <h4>Variables d'instance de LlmClient</h4>
+            <ul>
+              <li><code>String systemRole</code> : le rôle que l'utilisateur choisira pour l'assistant IA.</li>
+              <li><code>Assistant assistant</code> : Assistant est l'interface que vous avez défini pour décrire les interactions avec le LLM.</li>
+              <li><code>ChatMemory chatMemory</code> : la mémoire utilisée par l'assistant pour garder l'historique de la conversation. En effet, l'API des LLMs est sans état et c'est au client de garder l'état de la conversation (tous les messages échangés depuis le début de la conversation). Dans le TP 1 vous passiez l'historique à chaque requête. Maintenant, c'est LangChain4j qui va s'en occuper pour vous. <code>ChatMemory</code> est une interface de LangChain4j qui facilite la gestion de l'historique de la conversation.</li>
+            </ul>
+            <h4>Constructeur de LlmClient</h4>
+            <ol>
+              <li>Récupère la valeur de la clé secrète du LLM avec la méthode Java standard <code>System.getenv</code>.</li>
+              <li>Crée une instance de type  <code>ChatModel</code> qui représente le LLM. Pour la création du modèle, utilisez le builder pour passer la clé de l'API et donnez le nom du modèle (gemini-3.5-flash par exemple).              </li>
+              <li>Crée l'assistant en utilisant la classe AiServices fournie par LangChain4j. Remarquez la configuration de la mémoire pour garder jusqu'à 10 messages :
+                <pre>this.chatMemory = MessageWindowChatMemory.withMaxMessages(20);
+this.assistant = AiServices.builder(Assistant.class)
+                           .chatModel(model)
+                           .chatMemory(chatMemory)
+                           .build();</pre></li>
+            </ol>
+            <p>Remarque (pas demandé pour ce TP) : Si vous voulez permettre à l'utilisateur de modifier des paramètres du modèle, par exemple la température, il faudra reporter la création du modèle et de l'assistant au moment où la première question est posée. Il faudra alors garder l'assistant dans une variable d'instance pour ne pas le recréer à chaque nouvelle question.</p>
+            <h4>Méthodes de LlmClient</h4>
+            <p>2 méthodes :</p>
+            <ul>
+              <li>Un setter pour le rôle système (celui indiqué par la liste déroulante de la page JSF). Il ajoute ce rôle à la mémoire, comme instance de type <code>SystemMessage</code> pour qu'il soit pris en compte par le LLM. Lorsque le rôle système est mis, le contexte change tout à fait et donc il vaut mieux vider la mémoire avant de mettre le rôle système. Dans le backing bean n'oubliez pas d'utiliser ce setter dans le cas où on est au début de la conversation. Attention, passer le rôle système ne suffit pas, il faut l'ajouter à la mémoire pour que le LLM en tienne compte.</li>
+              <li>Une méthode qui envoie une requête au LLM et qui reçoit une réponse en retour. Cette méthode utilise l'instance de l'interface <code>Assistant</code> (instance dont la classe est implémentée par LangChain4j comme c'est expliqué <a href="#service">plus haut</a>).            </li>
+            </ul>
+            <h3>Test de l'application</h3>
+            <p>Testez. En particulier, si vous choisissez le rôle &quot;Traducteur&quot; et si envoyez &quot;bonjour&quot;, est-ce que le LLM envoie bien une traduction ? Si ça n'est pas le cas, c'est que vous n'utilisez pas le rôle système correctement.</p>
+            <p>Git et GitHub si tout va bien.            </p>
+            <p><strong>Pour obtenir un autre bonus pour cette application Web (en plus du bonus pour les tests)</strong>, envoyez-moi un email avec l'URL du dépôt GitHub de l'application Web (sujet qui contient &quot;TP 2 - Web terminé&quot;).</p>
+            <h3>Correction </h3>
+            <p><a href="correction/lanchain4j/pageJSF.html">Page JSF</a> (n'oubliez pas les fichiers <a href="correction/lanchain4j/script.html">JavaScript</a> et <a href="correction/lanchain4j/css.html">CSS</a>)<br />
+              <a href="correction/lanchain4j/backingbean.html">Backing bean</a><br />
+              <a href="correction/lanchain4j/LlmClient.html">LlmClient.java</a><br />
+              <a href="correction/lanchain4j/Assistant.html">Assistant.java</a></p>
+            <h2><a name="tokens" id="tokens"></a><em>Optionnel</em> : Afficher le nombre de tokens utilisés depuis le début de l'exécution</h2>
+            <p>Ce total doit prendre en compte ce qui a été utilisé, même si le rôle système a été modifié. <a href="aide/comptertokens/index.html">Aide</a>.</p>
+            <p>Rappel : les parties optionnelles ne sont pas au programme de l'examen. Elles sont destinées à ceux qui veulent en savoir un peu plus. Il est préférable de ne faire ces parties optionnelles qu'après avoir bien pris le temps de comprendre les autres parties des TPs.</p>
+            <h2><em><a name="streaming" id="streaming"></a>Optionnel</em> : Utilisation de LangChain4j et de WebSocket pour recevoir les réponses au fur et à mesure de leurs génération par le LLM</h2>
+            <p><strong>AVERTISSEMENT</strong> : Cet exercice est optionnel : vous n'êtes pas obligé de le faire. Il est assez long ; ne le faites que si vous avez de l'avance et que vous ne pouvez pas passer tout de suite au prochain TP.</p>
+            <p>Les LLMs  affichent leurs réponses en streaming : ils n'attendent pas d'avoir généré tous les tokens de la réponse pour l'envoyer à l'utilisateur. Ils envoient les tokens de la réponse dès qu'ils les ont générés (en fait certains LLMs, comme Gemini, regroupent les tokens ; le streaming envoie alors des groupes de tokens et pas des tokens isolés). Vous allez faire de même.</p>
+            <p>Pour cela vous allez utiliser une option de LangChain4j qui permet d'obtenir la réponse token par token pour l'API du LLM. </p>
+            <p>Les échanges entre le serveur et la page JSF vont utiliser un <a href="https://fr.wikipedia.org/wiki/WebSocket">websocket</a>.Vous allez ajouter un websocket dans la page JSF de l'application qui fait l'interface avec l'utilisateur, en utilisant  la balise JSF <code>&lt;f:websocket&gt;</code>. Cette balise va indiquer les fonctions JavaScript qui seront exécutées lors d'événements liés au websocket.</p>
+            <p>Les questions de l'utilisateur sont envoyées à <code>LlmClient</code>, comme pour les versions sans streaming. Cette fois-ci, la méthode de <code>LlmClient</code> retourne un <code>TokenStream</code>.</p>
+            <p>Le backing bean configure le <code>TokenStream</code> (méthode <code>onPartialResponse</code>, <code>onCompleteResponse</code>, <code>onError</code>) et lance le processus d'envoi des tokens (méthode <code>start</code>). La méthode <code>onPartialResponse</code> envoie le token reçu (en fait, plusieurs tokens sont souvent envoyés en une seule fois) dans le webSocket. La méthode <code>onCompleteResponse</code> envoie un événement particulier dans le webSocket pour déclencher l'exécution d'une fonction JavaScript qui va mettre à jour la conversation avec la réponse complète du LLM.</p>
+            <p>Pour les réponses courtes, il n'y aura pas un grand changement car les tokens sont envoyés à grande vitesse, mais si la réponse est longue, ou si le réseau est lent, vous verrez bien les tokens s'afficher au fur et à mesure.</p>
+            <p><a href="aide/streaming/index.html">Aide</a>.</p>
+            <p>Tutoriel Jakarta EE sur WebSocket : <a href="https://jakarta.ee/learn/docs/jakartaee-tutorial/current/web/websocket/websocket.html">https://jakarta.ee/learn/docs/jakartaee-tutorial/current/web/websocket/websocket.html</a> et <a href="https://jakarta.ee/learn/docs/jakartaee-tutorial/current/web/faces-ws/faces-ws.html">https://jakarta.ee/learn/docs/jakartaee-tutorial/current/web/faces-ws/faces-ws.html</a> (pour utilisation avec JSF).</p>
+            <h3>Correction</h3>
+            <p><a href="correction/streaming/page.html">Page JSF</a><br />
+              <a href="correction/streaming/backingbean.html">Backing bean Bb.java</a><br />
+              <a href="correction/streaming/LlmClient.html">Classe LlmClient.java</a><br />
+              <a href="correction/streaming/Assistant.html">InterfaceAssistant.java</a><br />
+              <a href="correction/streaming/script.js.html">script.js</a><br />
+            </p>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <a href="../index.html">Retour TPs</a>
+  </body>
+  </html>

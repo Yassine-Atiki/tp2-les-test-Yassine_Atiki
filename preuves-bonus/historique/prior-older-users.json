@@ -1,0 +1,102 @@
+[
+  {
+    "type": "userMessage",
+    "id": "fc293af1-8eeb-4e7f-865f-f0a405ae20cc",
+    "content": [
+      {
+        "type": "text",
+        "text": "=== Avec RAG ===\nQuestion : Pierre appelle son chat. Qu'est-ce qu'il pourrait dire ?\nRéponse : Il pourrait dire « Felix »."
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "897f643e-ed39-4dd2-bfc6-b90580072f95",
+    "content": [
+      {
+        "type": "text",
+        "text": "=== Avec RAG ===\nQuestion : Comment s'appelle le chat de Pierre ?\nRéponse : Le chat de Pierre s'appelle Felix."
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "dded2746-413b-4160-b803-3a82f93c1c78",
+    "content": [
+      {
+        "type": "text",
+        "text": "=== Sans RAG ===\nQuestion : Comment s'appelle le chat de Pierre ?\nRéponse : Il y a plusieurs personnages ou personnes nommés Pierre qui ont des chats célèbres. Pourriez-vous préciser de quel Pierre il s'agit ? \n\nPar exemple :\n* S'agit-il d'un personnage de fiction, de littérature (comme dans un conte) ?\n* D'une personnalité publique ou d'un influenceur ?\n* D'une énigme ?\n\nDonnez-moi un peu plus de contexte et je pourrai vous répondre !\n\nProcess finished with exit code 0"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "b3c9faaf-807b-4c00-8c2f-e5076d045c7e",
+    "content": [
+      {
+        "type": "text",
+        "text": "passe"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "1c46f7fa-1c4c-4af1-b0a3-673ae864293d",
+    "content": [
+      {
+        "type": "text",
+        "text": "Couple 1\nPhrase 1 : Le chat dort sur le canapé.\nPhrase 2 : Un félin se repose sur le sofa.\nSimilarité BGE : 0,6475\nSimilarité Gemini : 0,9323\n\nCouple 2\nPhrase 1 : Il fait très chaud aujourd'hui.\nPhrase 2 : Il fait très froid aujourd'hui.\nSimilarité BGE : 0,9084\nSimilarité Gemini : 0,8533\n\nCouple 3\nPhrase 1 : Je programme une application Java.\nPhrase 2 : Je développe un logiciel en Java.\nSimilarité BGE : 0,8267\nSimilarité Gemini : 0,9617\n\nCouple 4\nPhrase 1 : La voiture roule sur l'autoroute.\nPhrase 2 : Je prépare une salade de tomates.\nSimilarité BGE : 0,6093\nSimilarité Gemini : 0,7195\n\nCouple 5\nPhrase 1 : L'étudiant révise pour son examen.\nPhrase 2 : Un élève se prépare à une épreuve.\nSimilarité BGE : 0,7174\nSimilarité Gemini : 0,9306\n\nCouple 6\nPhrase 1 : Le ciel est couvert et il pleut.\nPhrase 2 : Une banque approuve un prêt immobilier.\nSimilarité BGE : 0,7048\nSimilarité Gemini : 0,7269\n\nProcess finished with exit code 0"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "344364d7-b893-4b6f-b21f-c4f6297e8819",
+    "content": [
+      {
+        "type": "text",
+        "text": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by ai.onnxruntime.OnnxRuntime in an unnamed module (file:/C:/Users/USER%20PC/.m2/repository/com/microsoft/onnxruntime/onnxruntime/1.20.0/onnxruntime-1.20.0.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nSLF4J(W): No SLF4J providers were found.\nSLF4J(W): Defaulting to no-operation (NOP) logger implementation\nSLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.\nException in thread \"main\" com.google.genai.errors.GenAiIOException: Failed to execute HTTP request.\n\tat com.google.genai.HttpApiClient.executeRequest(HttpApiClient.java:94)\n\tat com.google.genai.HttpApiClient.request(HttpApiClient.java:67)\n\tat com.google.genai.HttpApiClient.request(HttpApiClient.java:35)\n\tat com.google.genai.Models.privateEmbedContent(Models.java:5909)\n\tat com.google.genai.Models.embedContent(Models.java:7724)\n\tat dev.langchain4j.model.google.genai.GoogleGenAiEmbeddingModel.lambda$embedAllInternal$2(GoogleGenAiEmbeddingModel.java:325)\n\tat dev.langchain4j.internal.ExceptionMapper.withExceptionMapper(ExceptionMapper.java:29)\n\tat dev.langchain4j.internal.RetryUtils.lambda$withRetryMappingExceptions$1(RetryUtils.java:405)\n\tat dev.langchain4j.internal.RetryUtils$RetryPolicy.withRetry(RetryUtils.java:213)\n\tat dev.langchain4j.internal.RetryUtils.withRetry(RetryUtils.java:342)\n\tat dev.langchain4j.internal.RetryUtils.withRetryMappingExceptions(RetryUtils.java:405)\n\tat dev.langchain4j.model.google.genai.GoogleGenAiEmbeddingModel.embedAllInternal(GoogleGenAiEmbeddingModel.java:324)\n\tat dev.langchain4j.model.google.genai.GoogleGenAiEmbeddingModel.lambda$embedAll$0(GoogleGenAiEmbeddingModel.java:271)\n\tat dev.langchain4j.model.embedding.EmbeddingModelListenerUtils.withListeners(EmbeddingModelListenerUtils.java:50)\n\tat dev.langchain4j.model.google.genai.GoogleGenAiEmbeddingModel.embedAll(GoogleGenAiEmbeddingModel.java:271)\n\tat dev.langchain4j.model.google.genai.GoogleGenAiEmbeddingModel.embed(GoogleGenAiEmbeddingModel.java:261)\n\tat dev.langchain4j.model.google.genai.GoogleGenAiEmbeddingModel.embed(GoogleGenAiEmbeddingModel.java:266)\n\tat ma.emsi.yassine.atiki.Test4Embeddings.main(Test4Embeddings.java:70)\nCaused by: java.io.InterruptedIOException: timeout\n\tat okhttp3.internal.connection.RealCall.timeoutExit(RealCall.kt:398)\n\tat okhttp3.internal.connection.RealCall.callDone(RealCall.kt:360)\n\tat okhttp3.internal.connection.RealCall.noMoreExchanges$okhttp(RealCall.kt:325)\n\tat okhttp3.internal.connection.RealCall.getResponseWithInterceptorChain$okhttp(RealCall.kt:209)\n\tat okhttp3.internal.connection.RealCall.execute(RealCall.kt:154)\n\tat com.google.genai.HttpApiClient.executeRequest(HttpApiClient.java:92)\n\t... 17 more\nCaused by: java.io.IOException: Canceled\n\tat okhttp3.internal.http.RetryAndFollowUpInterceptor.intercept(RetryAndFollowUpInterceptor.kt:72)\n\tat okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.kt:109)\n\tat com.google.genai.RetryInterceptor.intercept(RetryInterceptor.java:82)\n\tat okhttp3.internal.http.RealInterceptorChain.proceed(RealInterceptorChain.kt:109)\n\tat okhttp3.internal.connection.RealCall.getResponseWithInterceptorChain$okhttp(RealCall.kt:201)\n\t... 19 more\n\nProcess finished with exit code 1"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "002d28fc-11f5-45b1-b5b1-f82fa2f98c7e",
+    "content": [
+      {
+        "type": "text",
+        "text": "WARNING: A restricted method in java.lang.System has been called\nWARNING: java.lang.System::load has been called by ai.onnxruntime.OnnxRuntime in an unnamed module (file:/C:/Users/USER%20PC/.m2/repository/com/microsoft/onnxruntime/onnxruntime/1.20.0/onnxruntime-1.20.0.jar)\nWARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module\nWARNING: Restricted methods will be blocked in a future release unless native access is enabled\n\nSLF4J(W): No SLF4J providers were found.\nSLF4J(W): Defaulting to no-operation (NOP) logger implementation\nSLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.\n=== Modèle BGE Small EN V1.5 ===\n\nCouple 1\nPhrase 1 : Le chat dort sur le canapé.\nPhrase 2 : Un félin se repose sur le sofa.\nSimilarité : 0,6475\n\nCouple 2\nPhrase 1 : Il fait très chaud aujourd'hui.\nPhrase 2 : Il fait très froid aujourd'hui.\nSimilarité : 0,9084\n\nCouple 3\nPhrase 1 : Je programme une application Java.\nPhrase 2 : Je développe un logiciel en Java.\nSimilarité : 0,8267\n\nCouple 4\nPhrase 1 : La voiture roule sur l'autoroute.\nPhrase 2 : Je prépare une salade de tomates.\nSimilarité : 0,6093\n\nCouple 5\nPhrase 1 : L'étudiant révise pour son examen.\nPhrase 2 : Un élève se prépare à une épreuve.\nSimilarité : 0,7174\n\nCouple 6\nPhrase 1 : Le ciel est couvert et il pleut.\nPhrase 2 : Une banque approuve un prêt immobilier.\nSimilarité : 0,7048\n\nProcess finished with exit code 0"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "198b39b4-88fa-473b-8476-de6470f00d72",
+    "content": [
+      {
+        "type": "text",
+        "text": "passe"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "dec61aac-e4ed-4a79-97bc-f03e3d58c3c0",
+    "content": [
+      {
+        "type": "text",
+        "text": "=== Test 3.1 : un paramètre ===\nPrompt : Traduis le texte suivant en anglais : Bonjour, comment allez-vous aujourd'hui ?\nRéponse : Voici la traduction : \n\n\"Hello, how are you today?\"\n\n=== Test 3.2 : deux paramètres ===\nPrompt : Traduis le texte suivant en espagnol : Bonjour, je suis étudiant en informatique.\nRéponse : Voici la traduction en espagnol :\n\n\"Hola, soy estudiante de informática.\"\n\nProcess finished with exit code 0"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "cb57a975-d814-4180-a962-f2ec70a7fd94",
+    "content": [
+      {
+        "type": "text",
+        "text": "passe"
+      }
+    ]
+  }
+]

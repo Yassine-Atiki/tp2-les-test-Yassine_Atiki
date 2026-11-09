@@ -1,0 +1,30 @@
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+Test 7 — modèle : gemini-3.5-flash-lite
+Tapez fin ou exit pour terminer.
+Question : J'ai prévu d'aller aujourd'hui à la ville dont la latitude est 48.85 et la longitude est 2.35 pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?
+API GET https://api.open-meteo.com/v1/forecast?latitude=48.850000&longitude=2.350000&daily=precipitation_probability_max&forecast_days=3
+HTTP 200 JSON BRUT : {"latitude":48.853382,"longitude":2.355208,"generationtime_ms":0.043511390686035156,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":46.0,"daily_units":{"time":"iso8601","precipitation_probability_max":"%"},"daily":{"time":["2026-11-09","2026-11-10","2026-11-11"],"precipitation_probability_max":[90,83,53]}}
+Réponse : Oui, je vous conseille de mettre un parapluie dans votre valise, car des prévisions de pluie sont annoncées pour votre séjour de 3 jours à partir d'aujourd'hui.
+Question : Finalement, je ne vais partir que demain. Est-ce que tu me conseilles de prendre un parapluie ?
+API GET https://api.open-meteo.com/v1/forecast?latitude=48.850000&longitude=2.350000&daily=precipitation_probability_max&forecast_days=4
+HTTP 200 JSON BRUT : {"latitude":48.853382,"longitude":2.355208,"generationtime_ms":0.05447864532470703,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":46.0,"daily_units":{"time":"iso8601","precipitation_probability_max":"%"},"daily":{"time":["2026-11-09","2026-11-10","2026-11-11","2026-11-12"],"precipitation_probability_max":[90,83,53,15]}}
+Réponse : Oui, je vous conseille toujours de prendre un parapluie. Des prévisions de pluie sont annoncées pour votre séjour de 3 jours commençant dès demain.
+Question : Explique en une phrase ce qu'est une interface Java.
+Réponse : En Java, une interface est un contrat abstrait qui définit un ensemble de méthodes que les classes qui l'implémentent s'engagent à fournir.
+Question : J'ai prévu d'aller aujourd'hui à Paris pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?
+Exception in thread "main" java.lang.RuntimeException: The LLM is trying to execute the 'getCoordonnees' tool, but no such tool exists. Most likely, it is a hallucination. You can override this default strategy by setting the hallucinatedToolNameStrategy on the AiService
+	at dev.langchain4j.internal.Exceptions.runtime(Exceptions.java:40)
+	at dev.langchain4j.service.tool.HallucinatedToolNameStrategy.apply(HallucinatedToolNameStrategy.java:15)
+	at dev.langchain4j.service.tool.HallucinatedToolNameStrategy.apply(HallucinatedToolNameStrategy.java:9)
+	at dev.langchain4j.service.tool.ToolService.applyToolHallucinationStrategy(ToolService.java:2174)
+	at dev.langchain4j.service.tool.ToolService.internalExecuteTool(ToolService.java:2101)
+	at dev.langchain4j.service.tool.ToolService.executeTool(ToolService.java:2059)
+	at dev.langchain4j.service.tool.ToolService.executeSequentially(ToolService.java:2050)
+	at dev.langchain4j.service.tool.ToolService.execute(ToolService.java:1774)
+	at dev.langchain4j.service.tool.ToolService.executeInferenceAndToolsLoop(ToolService.java:675)
+	at dev.langchain4j.service.DefaultAiServices$1.invoke(DefaultAiServices.java:765)
+	at dev.langchain4j.service.DefaultAiServices$1.invoke(DefaultAiServices.java:234)
+	at jdk.proxy2/jdk.proxy2.$Proxy5.chat(Unknown Source)
+	at ma.emsi.yassine.atiki.Test7Outils.main(Test7Outils.java:42)

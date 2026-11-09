@@ -1,0 +1,15 @@
+diff --git a/src/main/java/ma/emsi/yassine/atiki/Test2Couts.java b/src/main/java/ma/emsi/yassine/atiki/Test2Couts.java
+index ed49358..e4c6a98 100644
+--- a/src/main/java/ma/emsi/yassine/atiki/Test2Couts.java
++++ b/src/main/java/ma/emsi/yassine/atiki/Test2Couts.java
+@@ -16,7 +16,9 @@ public class Test2Couts {
+                 .temperature(0.7)
+                 .build();
+ 
+-        String question = "Quelle est la capitale du Maroc ?";
++
++        String question = "Je dois partir dans 2 jours à Paris ; j'y resterai 3 jours. Est-ce que je dois mettre un parapluie dans mes valises ?";
++
+ 
+         ChatResponse reponse = model.chat(UserMessage.from(question));
+ 

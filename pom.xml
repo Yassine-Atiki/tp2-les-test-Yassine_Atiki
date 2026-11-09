@@ -47,6 +47,13 @@
         </dependency>
 
 
+        <!-- Test 7 : lecture des réponses JSON Open-Meteo -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.15.0</version>
+        </dependency>
+
     </dependencies>
 
 </project>

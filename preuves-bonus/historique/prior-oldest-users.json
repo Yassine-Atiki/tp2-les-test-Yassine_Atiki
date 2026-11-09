@@ -1,0 +1,102 @@
+[
+  {
+    "type": "userMessage",
+    "id": "9954d1ff-b67e-41c3-acf5-25ed1dccd879",
+    "content": [
+      {
+        "type": "text",
+        "text": "SLF4J(W): No SLF4J providers were found.\nSLF4J(W): Defaulting to no-operation (NOP) logger implementation\nSLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.\nQuestion : Quelle est la capitale du Maroc ?\nRéponse : La capitale du Maroc est **Rabat**.\nTokens d'entrée : 8\nTokens de sortie : 9\nTokens de raisonnement : 0\nTotal déclaré : 17\nCoût de la requête : 0,00002490 $\nRequêtes pour dépenser 1 $ : 40161\n\nProcess finished with exit code 0"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "6290164f-9b04-49b2-b25c-faeb1eafa3f1",
+    "content": [
+      {
+        "type": "text",
+        "text": "j'ai fait la premiere push, passe"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "b0057811-df67-43b8-8872-e136b142b405",
+    "content": [
+      {
+        "type": "text",
+        "text": "SLF4J(W): No SLF4J providers were found.\nSLF4J(W): Defaulting to no-operation (NOP) logger implementation\nSLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.\nQuestion 1 : Bonjour, je m'appelle Yassine Atiki.\nRéponse 1 : Bonjour Yassine ! Ravi de faire votre connaissance. Comment puis-je vous aider aujourd'hui ?\n------------------------------\nQuestion 2 : Comment je m'appelle ?\nRéponse 2 : Je ne le sais pas encore ! Comme je suis une intelligence artificielle, je ne connais pas votre nom à moins que vous ne me le disiez. \n\nComment vous appelez-vous ?\n\nProcess finished with exit code 0"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "fbc252a8-de19-4cc4-a786-8cc9ef35aee8",
+    "content": [
+      {
+        "type": "text",
+        "text": "attention n'oublier pas de me dire si un resultat d'u test je dois le sauvgarder pour l'envoyer au prof au quelque chose comme ca je sais pas, et aussi les commits,etc.... respecter bien les consigns du prof."
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "dd25700e-431d-4c64-8c00-0288b0f2d861",
+    "content": [
+      {
+        "type": "text",
+        "text": "SLF4J(W): No SLF4J providers were found.\nSLF4J(W): Defaulting to no-operation (NOP) logger implementation\nSLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.\nQuestion : Quelle heure est-il maintenant ?\nRéponse : Je ne peux pas vous donner l'heure exacte car je n'ai pas accès à votre localisation ni à votre fuseau horaire. \n\nVous pouvez consulter l'horloge de votre appareil (téléphone, ordinateur, montre) pour connaître l'heure actuelle !\n\nProcess finished with exit code 0"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "a948dc90-2d2b-418e-bbff-111a4c740615",
+    "content": [
+      {
+        "type": "text",
+        "text": "SLF4J(W): No SLF4J providers were found.\nSLF4J(W): Defaulting to no-operation (NOP) logger implementation\nSLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.\nQuestion : Quelle est la capitale du Maroc ?\nRéponse : La capitale du Maroc est **Rabat**.\n\nProcess finished with exit code 0"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "8a45b79e-9e2f-4726-9f0b-e562d7d64b4d",
+    "content": [
+      {
+        "type": "text",
+        "text": "je peux pas moi meme acceder a cette page je pense on va continuer avec votre code pour ce moment apres tu va verifier tout d'abord si il y'a un code de la part du prof"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "f72487a2-fb26-4157-b522-b332e97cd5e9",
+    "content": [
+      {
+        "type": "text",
+        "text": "les codes fournit sont les codes du prof ?"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "b5e6cf4a-d3cd-4006-b6d7-a8c912b358ee",
+    "content": [
+      {
+        "type": "text",
+        "text": "PS C:\\Users\\USER PC\\IdeaProjects\\tp2-tests-yassine-atiki> mvn clean compile\\\n[**INFO**] Scanning for projects...\\\n[**INFO**] \\\n[**INFO**] **-----------<&#x20;**&#x6D;a.emsi.yassine.atiki:tp2-tests-yassine-atik&#x69;**&#x20;>------------**\\\n[**INFO**] **Building tp2-tests-yassine-atiki 1.0-SNAPSHOT**\\\n[**INFO**]   from pom.xml\\\n[**INFO**] **--------------------------------[ jar ]---------------------------------**\\\n[**INFO**] \\\n[**INFO**] **---&#x20;**&#x63;lean:3.2.0:clean **(default-clean)** @ tp2-tests-yassine-atik&#x69;**&#x20;---**\\\nDownloading from central: [https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-utils/3.3.4/maven-shared-utils-3.3.4.jar](https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-utils/3.3.4/maven-shared-utils-3.3.4.jar)\\\nDownloaded from central: [https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-utils/3.3.4/maven-shared-utils-3.3.4.jar](https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-shared-utils/3.3.4/maven-shared-utils-3.3.4.jar) (153 kB at 151 kB/s)\\\n[**INFO**] \\\n[**INFO**] **---&#x20;**&#x72;esources:3.4.0:resources **(default-resources)** @ tp2-tests-yassine-atik&#x69;**&#x20;---**\\\nDownloading from central: [https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-filtering/3.4.0/maven-filtering-3.4.0.jar](https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-filtering/3.4.0/maven-filtering-3.4.0.jar)\\\nDownloaded from central: [https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-filtering/3.4.0/maven-filtering-3.4.0.jar](https://repo.maven.apache.org/maven2/org/apache/maven/shared/maven-filtering/3.4.0/maven-filtering-3.4.0.jar) (56 kB at 207 kB/s)                                                                                                                       \\\n[**INFO**] Copying 0 resource from src\\main\\resources to target\\classes\\\n[**INFO**] \\\n[**INFO**] **---&#x20;**&#x63;ompiler:3.15.0:compile **(default-compile)** @ tp2-tests-yassine-atik&#x69;**&#x20;---**\\\n[**INFO**] Recompiling the module because of **changed source code**.\\\n[**INFO**] Compiling 1 source file with javac [debug target 25] to target\\classes\\\n[**INFO**] **------------------------------------------------------------------------**\\\n[**INFO**] **BUILD SUCCESS**\\\n[**INFO**] **------------------------------------------------------------------------**\\\n[**INFO**] Total time:  5.547 s\\\n[**INFO**] Finished at: 2026-11-09T22:42:54+01:00\\\n[**INFO**] **------------------------------------------------------------------------**\\\n\n[User attached 1 image; image contents were not included]"
+      }
+    ]
+  },
+  {
+    "type": "userMessage",
+    "id": "6ca7892e-82b3-4d58-992e-52e04c78aba8",
+    "content": [
+      {
+        "type": "text",
+        "text": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project xmlns=\"http://maven.apache.org/POM/4.0.0\"\n         xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n         xsi:schemaLocation=\"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd\">\n    <modelVersion>4.0.0</modelVersion>\n\n    <groupId>ma.emsi.yassine.atiki</groupId>\n    <artifactId>tp2-tests-yassine-atiki</artifactId>\n    <version>1.0-SNAPSHOT</version>\n\n    <properties>\n        <maven.compiler.source>25</maven.compiler.source>\n        <maven.compiler.target>25</maven.compiler.target>\n        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>\n    </properties>\n\n\n    <dependency>\n        <groupId>dev.langchain4j</groupId>\n        <artifactId>langchain4j</artifactId>\n        <version>1.22.0</version>\n    </dependency>\n\n    <dependency>\n        <groupId>dev.langchain4j</groupId>\n        <artifactId>langchain4j-google-genai</artifactId>\n        <version>1.22.0-beta32</version>\n    </dependency>\n\n\n</project>"
+      }
+    ]
+  }
+]

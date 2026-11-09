@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Conversation avec LLM</title>
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-54CZ03KHVB"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-54CZ03KHVB');
+</script>
+
+<body>
+<p>Voici le code de base pour vous permettre de poser plusieurs questions à l'assistant. La classe Scanner est dans java.util. Lisez le code pour savoir comment arrêter la conversation :</p>
+<pre>
+try (Scanner scanner = new Scanner(System.in)) {
+  while (true) {
+    System.out.println("==================================================");
+    System.out.println("Posez votre question : ");
+    String question = scanner.nextLine();
+    if (question.isBlank()) {
+      continue;
+    }
+    System.out.println("==================================================");
+    if ("fin".equalsIgnoreCase(question)) {
+      break;
+    }
+    String reponse = assistant.chat(question);
+    System.out.println("Assistant : " + reponse);
+    System.out.println("==================================================");
+  }
+}</pre>
+<p>Vous pouvez aussi rendre le code plus lisible et plus facile à insérer dans vos futurs programmes en l'insérant dans une méthode <code>private static void conversationAvec(Assistant assistant)</code>.</p>
+</body>
+</html>

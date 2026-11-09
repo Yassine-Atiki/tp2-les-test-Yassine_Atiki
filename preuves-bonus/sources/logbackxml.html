@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Fichier logback.xml</title>
+</head>
+
+<body>
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;configuration>
+    &lt;appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        &lt;encoder>
+            &lt;pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n&lt;/pattern>
+        &lt;/encoder>
+    &lt;/appender>
+
+    &lt;logger name="dev.langchain4j" level="INFO"/>
+    &lt;logger name=&quot;org.apache.fontbox&quot; level=&quot;WARN&quot;/&gt;
+
+    &lt;root level="INFO">
+        &lt;appender-ref ref="CONSOLE"/>
+    &lt;/root>
+&lt;/configuration>
+</pre>
+</body>
+</html>

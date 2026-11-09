@@ -1,0 +1,34 @@
+Erreur attendue : P�riode hors des 7 jours du TP (aujourd'hui = 0).
+Erreur attendue : P�riode hors des 7 jours du TP (aujourd'hui = 0).
+Erreur attendue : P�riode hors des 7 jours du TP (aujourd'hui = 0).
+Erreur attendue : Probabilit� indisponible pour le jour 0
+Erreur attendue : P�riode incompl�te dans la r�ponse m�t�o.
+Contr�les locaux : OK (donn�es de contr�le, pas de m�t�o simul�e).
+CAS : Paris aujourd'hui, 3 jours
+API GET https://api.open-meteo.com/v1/forecast?latitude=48.850000&longitude=2.350000&daily=precipitation_probability_max&forecast_days=3
+HTTP 200 JSON BRUT : {"latitude":48.853382,"longitude":2.355208,"generationtime_ms":0.0591278076171875,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":46.0,"daily_units":{"time":"iso8601","precipitation_probability_max":"%"},"daily":{"time":["2026-11-09","2026-11-10","2026-11-11"],"precipitation_probability_max":[90,83,53]}}
+isPluiePrevue = true
+CAS : Paris demain, 3 jours
+API GET https://api.open-meteo.com/v1/forecast?latitude=48.850000&longitude=2.350000&daily=precipitation_probability_max&forecast_days=4
+HTTP 200 JSON BRUT : {"latitude":48.853382,"longitude":2.355208,"generationtime_ms":0.033020973205566406,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":46.0,"daily_units":{"time":"iso8601","precipitation_probability_max":"%"},"daily":{"time":["2026-11-09","2026-11-10","2026-11-11","2026-11-12"],"precipitation_probability_max":[90,83,53,15]}}
+isPluiePrevue = true
+CAS : Paris dans 2 jours, 3 jours
+API GET https://api.open-meteo.com/v1/forecast?latitude=48.850000&longitude=2.350000&daily=precipitation_probability_max&forecast_days=5
+HTTP 200 JSON BRUT : {"latitude":48.853382,"longitude":2.355208,"generationtime_ms":0.04982948303222656,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":46.0,"daily_units":{"time":"iso8601","precipitation_probability_max":"%"},"daily":{"time":["2026-11-09","2026-11-10","2026-11-11","2026-11-12","2026-11-13"],"precipitation_probability_max":[90,83,53,15,15]}}
+isPluiePrevue = true
+CAS : Rabat aujourd'hui, 3 jours
+API GET https://api.open-meteo.com/v1/forecast?latitude=34.013250&longitude=-6.832550&daily=precipitation_probability_max&forecast_days=3
+HTTP 200 JSON BRUT : {"latitude":34.004356,"longitude":-6.820946,"generationtime_ms":0.023126602172851562,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":41.0,"daily_units":{"time":"iso8601","precipitation_probability_max":"%"},"daily":{"time":["2026-11-09","2026-11-10","2026-11-11"],"precipitation_probability_max":[93,3,90]}}
+isPluiePrevue = true
+CAS : Sydney aujourd'hui, 3 jours
+API GET https://api.open-meteo.com/v1/forecast?latitude=-33.867850&longitude=151.207320&daily=precipitation_probability_max&forecast_days=3
+HTTP 200 JSON BRUT : {"latitude":-33.848858,"longitude":151.19551,"generationtime_ms":0.022530555725097656,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":51.0,"daily_units":{"time":"iso8601","precipitation_probability_max":"%"},"daily":{"time":["2026-11-09","2026-11-10","2026-11-11"],"precipitation_probability_max":[84,20,43]}}
+isPluiePrevue = true
+CAS : Paris seuil 0
+API GET https://api.open-meteo.com/v1/forecast?latitude=48.850000&longitude=2.350000&daily=precipitation_probability_max&forecast_days=3
+HTTP 200 JSON BRUT : {"latitude":48.853382,"longitude":2.355208,"generationtime_ms":0.04470348358154297,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":46.0,"daily_units":{"time":"iso8601","precipitation_probability_max":"%"},"daily":{"time":["2026-11-09","2026-11-10","2026-11-11"],"precipitation_probability_max":[90,83,53]}}
+isPluiePrevue = true
+CAS : Paris seuil 100
+API GET https://api.open-meteo.com/v1/forecast?latitude=48.850000&longitude=2.350000&daily=precipitation_probability_max&forecast_days=3
+HTTP 200 JSON BRUT : {"latitude":48.853382,"longitude":2.355208,"generationtime_ms":0.02956390380859375,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":46.0,"daily_units":{"time":"iso8601","precipitation_probability_max":"%"},"daily":{"time":["2026-11-09","2026-11-10","2026-11-11"],"precipitation_probability_max":[90,83,53]}}
+isPluiePrevue = false

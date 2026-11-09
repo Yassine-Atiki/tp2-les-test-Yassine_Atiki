@@ -1,0 +1,19 @@
+SLF4J(W): No SLF4J providers were found.
+SLF4J(W): Defaulting to no-operation (NOP) logger implementation
+SLF4J(W): See https://www.slf4j.org/codes.html#noProviders for further details.
+Test 7 — modèle : gemini-3.5-flash-lite
+Tapez fin ou exit pour terminer.
+Question : J'ai prévu d'aller aujourd'hui à la ville dont la latitude est 48.85 et la longitude est 2.35 pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?
+API GET https://api.open-meteo.com/v1/forecast?latitude=48.850000&longitude=2.350000&daily=precipitation_probability_max&forecast_days=3
+HTTP 200 JSON BRUT : {"latitude":48.853382,"longitude":2.355208,"generationtime_ms":0.055909156799316406,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":46.0,"daily_units":{"time":"iso8601","precipitation_probability_max":"%"},"daily":{"time":["2026-11-09","2026-11-10","2026-11-11"],"precipitation_probability_max":[90,83,53]}}
+Réponse : Oui, je vous conseille de mettre un parapluie dans votre valise, car de la pluie est prévue durant votre séjour de 3 jours à partir d'aujourd'hui.
+Question : Finalement, je ne vais partir que demain. Est-ce que tu me conseilles de prendre un parapluie ?
+API GET https://api.open-meteo.com/v1/forecast?latitude=48.850000&longitude=2.350000&daily=precipitation_probability_max&forecast_days=4
+HTTP 200 JSON BRUT : {"latitude":48.853382,"longitude":2.355208,"generationtime_ms":0.040531158447265625,"utc_offset_seconds":0,"timezone":"GMT","timezone_abbreviation":"GMT","elevation":46.0,"daily_units":{"time":"iso8601","precipitation_probability_max":"%"},"daily":{"time":["2026-11-09","2026-11-10","2026-11-11","2026-11-12"],"precipitation_probability_max":[90,83,53,15]}}
+Réponse : Oui, je vous conseille toujours de prendre un parapluie. De la pluie est prévue pour votre séjour de 3 jours, qui commence cette fois-ci demain.
+Question : Explique en une phrase ce qu'est une interface Java.
+Réponse : Une interface Java est un contrat de programmation abstrait qui définit un ensemble de méthodes que les classes qui l'implémentent s'engagent à fournir.
+Question : J'ai prévu d'aller aujourd'hui à Paris pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?
+Réponse : Pour Paris (latitude 48.8566, longitude 2.3522), voici les prévisions pour votre séjour de 3 jours commençant aujourd'hui :
+Question : J'ai prévu d'aller aujourd'hui à la ville de Zzyzx pour un séjour de 3 jours. Est-ce que tu me conseilles de mettre un parapluie dans ma valise ?
+Réponse : Je ne connais pas les coordonnées géographiques (latitude et longitude) de la ville de Zzyzx, ce qui m'empêche de vérifier les prévisions météo pour cet endroit. Si vous me les fournissez, je pourrai vous dire s'il est conseillé de prendre un parapluie.
